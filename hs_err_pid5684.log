@@ -1,0 +1,133 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:126), pid=5684, tid=6184
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version:  (8.0_31-b13) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.31-b07 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000001f9e800):  JavaThread "Unknown thread" [_thread_in_vm, id=6184, stack(0x0000000001fa0000,0x00000000020a0000)]
+
+Stack: [0x0000000001fa0000,0x00000000020a0000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x3169ba]
+V  [jvm.dll+0x2674c3]
+V  [jvm.dll+0x268103]
+V  [jvm.dll+0x25f876]
+V  [jvm.dll+0x5e443]
+V  [jvm.dll+0x5e533]
+V  [jvm.dll+0x72e9a]
+V  [jvm.dll+0x73208]
+V  [jvm.dll+0xe4997]
+V  [jvm.dll+0xe4d26]
+V  [jvm.dll+0x1fa057]
+V  [jvm.dll+0x22b694]
+V  [jvm.dll+0x14d8c1]
+C  [javaw.exe+0x20c6]
+C  [javaw.exe+0xc9eb]
+C  [javaw.exe+0xca7f]
+C  [KERNEL32.DLL+0x12d92]
+C  [ntdll.dll+0x9f64]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000001f9e800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=6184, stack(0x0000000001fa0000,0x00000000020a0000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.095 loading class java/lang/CharSequence done
+Event: 0.096 loading class java/lang/String done
+Event: 0.096 loading class java/lang/Class
+Event: 0.096 loading class java/lang/reflect/AnnotatedElement
+Event: 0.096 loading class java/lang/reflect/AnnotatedElement done
+Event: 0.096 loading class java/lang/reflect/GenericDeclaration
+Event: 0.096 loading class java/lang/reflect/GenericDeclaration done
+Event: 0.096 loading class java/lang/reflect/Type
+Event: 0.096 loading class java/lang/reflect/Type done
+Event: 0.096 loading class java/lang/Class done
+
+
+Dynamic libraries:
+0x00007ff797ea0000 - 0x00007ff797ed4000 	C:\Program Files\Java\jre1.8.0_31\bin\javaw.exe
+0x00007ffdc7570000 - 0x00007ffdc7732000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffdc6150000 - 0x00007ffdc61fd000 	C:\WINDOWS\system32\KERNEL32.DLL
+0x00007ffdc4080000 - 0x00007ffdc425d000 	C:\WINDOWS\system32\KERNELBASE.dll
+0x00007ffdc74b0000 - 0x00007ffdc7556000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x00007ffdc6e70000 - 0x00007ffdc6f0d000 	C:\WINDOWS\system32\msvcrt.dll
+0x00007ffdc6650000 - 0x00007ffdc66ab000 	C:\WINDOWS\system32\sechost.dll
+0x00007ffdc7110000 - 0x00007ffdc7236000 	C:\WINDOWS\system32\RPCRT4.dll
+0x00007ffdc6f90000 - 0x00007ffdc70de000 	C:\WINDOWS\system32\USER32.dll
+0x00007ffdc7320000 - 0x00007ffdc74a6000 	C:\WINDOWS\system32\GDI32.dll
+0x00007ffdb5630000 - 0x00007ffdb58a4000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.10240.16384_none_f41f7b285750ef43\COMCTL32.dll
+0x00007ffdc6e30000 - 0x00007ffdc6e66000 	C:\WINDOWS\system32\IMM32.DLL
+0x00007ffdc6270000 - 0x00007ffdc63cc000 	C:\WINDOWS\system32\MSCTF.dll
+0x0000000057500000 - 0x00000000575d2000 	C:\Program Files\Java\jre1.8.0_31\bin\msvcr100.dll
+0x0000000057a00000 - 0x000000005825a000 	C:\Program Files\Java\jre1.8.0_31\bin\server\jvm.dll
+0x00007ffdc7100000 - 0x00007ffdc7108000 	C:\WINDOWS\system32\PSAPI.DLL
+0x00007ffdc1e00000 - 0x00007ffdc1e23000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffdba6c0000 - 0x00007ffdba6c9000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffdc6200000 - 0x00007ffdc6269000 	C:\WINDOWS\system32\WS2_32.dll
+0x00007ffdc6f10000 - 0x00007ffdc6f18000 	C:\WINDOWS\system32\NSI.dll
+0x00007ffdc1d40000 - 0x00007ffdc1d6c000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ffdc4b10000 - 0x00007ffdc4b54000 	C:\WINDOWS\system32\cfgmgr32.dll
+0x00007ffdc28f0000 - 0x00007ffdc2917000 	C:\WINDOWS\SYSTEM32\DEVOBJ.dll
+0x0000000057910000 - 0x000000005791f000 	C:\Program Files\Java\jre1.8.0_31\bin\verify.dll
+0x00000000578e0000 - 0x0000000057908000 	C:\Program Files\Java\jre1.8.0_31\bin\java.dll
+0x00000000574c0000 - 0x00000000574f5000 	C:\Program Files\Java\jre1.8.0_31\bin\jdwp.dll
+0x00000000574b0000 - 0x00000000574b8000 	C:\Program Files\Java\jre1.8.0_31\bin\npt.dll
+0x00000000578c0000 - 0x00000000578d6000 	C:\Program Files\Java\jre1.8.0_31\bin\zip.dll
+0x00007ffdc0b10000 - 0x00007ffdc0c9a000 	C:\WINDOWS\SYSTEM32\dbghelp.dll
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:50021 -Dfile.encoding=Cp1251 -Xbootclasspath:C:\Program Files (x86)\Android\android-sdk\platforms\android-18\android.jar 
+java_command: org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 50020 -testLoaderClass org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoader -loaderpluginname org.eclipse.jdt.junit4.runtime -classNames com.bgjug.jprime.tabs.JPMainFragmentTest
+java_class_path (initial): C:\Users\firepot\workspace\jprimeAndroid2016\bin\classes;C:\Users\firepot\workspace\jprimeAndroid2016\libs\android-support-v4.jar;D:\eclipse-jee-luna-SR1a-win32-x86_64\eclipse\plugins\org.junit_4.11.0.v201303080030\junit.jar;D:\eclipse-jee-luna-SR1a-win32-x86_64\eclipse\plugins\org.hamcrest.core_1.3.0.v201303031735.jar;/D:/eclipse-jee-luna-SR1a-win32-x86_64/eclipse/configuration/org.eclipse.osgi/362/0/.cp/;/D:/eclipse-jee-luna-SR1a-win32-x86_64/eclipse/configuration/org.eclipse.osgi/361/0/.cp/
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk1.8.0_31
+PATH=C:/Program Files/Java/jre1.8.0_31/bin/server;C:/Program Files/Java/jre1.8.0_31/bin;C:/Program Files/Java/jre1.8.0_31/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Calibre2\;C:\Program Files (x86)\Skype\Phone\;;C:\Program Files\Docker Toolbox;D:\eclipse-jee-luna-SR1a-win32-x86_64\eclipse;
+USERNAME=firepot
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 37 Stepping 5, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 8.1 , 64 bit Build 9600 
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 37 stepping 5, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, aes, clmul, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 8051060k(3449756k free), swap 16177524k(8542028k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.31-b07) for windows-amd64 JRE (1.8.0_31-b13), built on Dec 17 2014 21:00:28 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Sat Apr 02 18:07:14 2016
+elapsed time: 0 seconds (0d 0h 0m 0s)
+
