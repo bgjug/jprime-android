@@ -1,6 +1,5 @@
 package com.bgjug.jprime.model;
 
-import java.net.URL;
 
 public class Speaker
 {
@@ -8,17 +7,17 @@ public class Speaker
     private String firstName;
     private String email;
     private String bio;
-    private URL twitterURL;
+    private String twitterURL;
     private String headline;
-    private URL picture;
+    private byte[] picture;
 
     public Speaker()
     {
         super();
     }
 
-    public Speaker(String lastName, String firstName, String email, String bio, URL twitterURL,
-        String headline, URL picture)
+    public Speaker(String lastName, String firstName, String email, String bio, String twitterURL,
+        String headline, byte[] picture)
     {
         super();
         this.lastName = lastName;
@@ -70,12 +69,12 @@ public class Speaker
         this.bio = bio;
     }
 
-    public URL getTwitterURL()
+    public String getTwitterURL()
     {
         return twitterURL;
     }
 
-    public void setTwitterURL(URL twitterURL)
+    public void setTwitterURL(String twitterURL)
     {
         this.twitterURL = twitterURL;
     }
@@ -90,12 +89,12 @@ public class Speaker
         this.headline = headline;
     }
 
-    public URL getPicture()
+    public byte[] getPicture()
     {
         return picture;
     }
 
-    public void setPicture(URL picture)
+    public void setPicture(byte[] picture)
     {
         this.picture = picture;
     }

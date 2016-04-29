@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bgjug.jprime.rest.RestClient;
 import com.bgjug.jprime2016.R;
 
 public class AgendaFragment extends Fragment {
@@ -159,10 +158,6 @@ public class AgendaFragment extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				View agendaItemLayout = inflater.inflate(R.layout.agenda_item,
 						parent, false);
-
-//              TEST PURPOSES
-//				RestClient client = new RestClient();
-//				client.getSessions();
 
 				TextView sessionTime = (TextView) agendaItemLayout
 						.findViewById(R.id.textViewTime);

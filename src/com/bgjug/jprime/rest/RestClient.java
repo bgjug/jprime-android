@@ -20,168 +20,196 @@ import org.json.JSONObject;
 import com.bgjug.jprime.model.Session;
 import com.bgjug.jprime.model.Speaker;
 
-public class RestClient
-{
-    private JSONArray sessions = null;
-    private short statusCode = 0;
+public class RestClient {
+	private short statusCode = 0;
 
-    public RestClient()
-    {
-        initialize();
-    }
+	public RestClient() {
 
-    private void initialize()
-    {
-        JSONObject object;
-        try
-        {
-            object = new JSONObject(getWebContent("http://demo5590976.mockable.io/sessions")
-                .toString());
-            sessions = new JSONArray(object.getJSONObject("_embedded").getJSONArray("sessions")
-                .toString());
-        }
-        catch (Exception e)
-        {
-            statusCode = 1;
-        }
-    }
+	}
 
-    public List<Session> getSessions()
-    {
-        Session session = null;
-        Speaker speaker = null;
-        SessionHandler sessionHandler = null;
-        SpeakerHandler speakerHandler = null;
-        List<Session> result = new ArrayList<Session>();
+	private JSONArray initSessions() {
 
-        try
-        {
-            for (int i = 0; i < sessions.length(); i++)
-            {
-                String submissionURL = sessions.getJSONObject(i).getJSONObject("_links")
-                    .getJSONObject("submission").getString("href");
-                JSONObject submissionObject = new JSONObject(getWebContent(submissionURL)
-                    .toString());
+		JSONObject sessionsEntity = null;
+		JSONArray sessionsArray = null;
+		try {
+			sessionsEntity = new JSONObject(getWebContent(
+					ResourceConstants.JPRIME_URL + "/"
+							+ ResourceConstants.SESSIONS_RESOURCE).toString());
+			sessionsArray = new JSONArray(sessionsEntity
+					.getJSONObject(ResourceConstants.EMBEDDED)
+					.getJSONArray(ResourceConstants.SESSIONS_RESOURCE)
+					.toString());
+			
+		} catch (Exception e) {
+			statusCode = 1;
+		}
 
-                sessionHandler = new SessionHandler(sessions.getJSONObject(i), submissionObject);
-                session = sessionHandler.parseSession();
+		return sessionsArray;
+	}
 
-                JSONObject speakerObject = getSpeakerContent(submissionObject);
-                speakerHandler = new SpeakerHandler(speakerObject);
-                speaker = speakerHandler.parseSpeaker();
-                session.setSpeaker(speaker);
+	private JSONArray initSpeakers() {
 
-                String hallURL = sessions.getJSONObject(i).getJSONObject("_links")
-                    .getJSONObject("hall").getString("href");
-                String hallName = getHallName(hallURL);
+		JSONObject speakersEntity = null;
+		JSONArray speakersArray = null;
+		try {
+			speakersEntity = new JSONObject(getWebContent(
+					ResourceConstants.JPRIME_URL + "/"
+							+ ResourceConstants.SPEAKERS_RESOURCE).toString());
+			speakersArray = new JSONArray(speakersEntity
+					.getJSONObject(ResourceConstants.EMBEDDED)
+					.getJSONArray(ResourceConstants.SPEAKERS_RESOURCE)
+					.toString());
 
-                session.setHall(hallName);
+		} catch (Exception e) {
+			statusCode = 1;
+		}
 
-                result.add(session);
-            }
-        }
-        catch (Exception e)
-        {
-            statusCode = 1;
-        }
+		return speakersArray;
+	}
 
-        return result;
-    }
+	public List<Speaker> getSpeakers() {
 
-    private StringBuilder getWebContent(final String url) throws InterruptedException
-    {
-        final StringBuilder stringBuilder = new StringBuilder();
+		Speaker speaker = null;
+		SpeakerHandler speakerHandler = null;
+		List<Speaker> result = new ArrayList<Speaker>();
+		JSONArray speakers = initSpeakers();
 
-        Thread thread = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                InputStream inputStream = null;
+		try {
+			for (int i = 0; i < speakers.length(); i++) {
 
-                try
-                {
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet(url);
-                    HttpResponse httpResponse = httpClient.execute(httpGet);
-                    StatusLine status = httpResponse.getStatusLine();
-                    int statusCode = status.getStatusCode();
+				// Waiting for the resource
+			}
 
-                    if (statusCode == 200)
-                    {
-                        HttpEntity entity = httpResponse.getEntity();
-                        inputStream = entity.getContent();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                            inputStream));
-                        String line = null;
+		} catch (Exception e) {
+			statusCode = 1;
+		}
 
-                        while ((line = reader.readLine()) != null)
-                        {
-                            stringBuilder.append(line);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    statusCode = 1;
-                }
-                finally
-                {
-                    if (inputStream != null)
-                    {
-                        try
-                        {
-                            inputStream.close();
-                        }
-                        catch (IOException e)
-                        {
-                            // TODO
-                        }
-                    }
-                }
-            }
-        });
+		return result;
+	}
 
-        thread.start();
-        thread.join();
+	public List<Session> getSessions() {
 
-        return stringBuilder;
-    }
+		Session session = null;
+		Speaker speaker = null;
+		SessionHandler sessionHandler = null;
+		SpeakerHandler speakerHandler = null;
+		List<Session> result = new ArrayList<Session>();
+		JSONArray sessions = initSessions();
 
-    private JSONObject getSpeakerContent(JSONObject submissionObject) throws InterruptedException,
-        JSONException
-    {
-        String speakerURL = "";
-        JSONObject speaker = null;
+		try {
+			for (int i = 0; i < sessions.length(); i++) {
 
-        speakerURL = submissionObject.getJSONObject("_links").getJSONObject("speaker")
-            .getString("href");
-        StringBuilder speakerContent = getWebContent(speakerURL);
-        speaker = new JSONObject(speakerContent.toString());
+				String submissionURL = sessions.getJSONObject(i)
+						.getJSONObject(ResourceConstants.LINKS)
+						.getJSONObject(ResourceConstants.SUBMISSION_RESOURCE)
+						.getString("href");
+				JSONObject submissionObject = new JSONObject(getWebContent(
+						submissionURL).toString());
 
-        return speaker;
-    }
+				sessionHandler = new SessionHandler(sessions.getJSONObject(i),
+						submissionObject);
+				session = sessionHandler.parseSession();
 
-    private String getHallName(String hallURL) throws InterruptedException, JSONException
-    {
-        JSONObject hall;
-        String hallName = null;
+				JSONObject speakerObject = getSpeakerContent(submissionObject);
+				speakerHandler = new SpeakerHandler(speakerObject);
+				speaker = speakerHandler.parseSpeaker();
+				session.setSpeaker(speaker);
 
-        StringBuilder hallContent = getWebContent(hallURL);
-        hall = new JSONObject(hallContent.toString());
-        hallName = hall.getString("name");
+				String hallURL = sessions.getJSONObject(i)
+						.getJSONObject(ResourceConstants.LINKS)
+						.getJSONObject("hall").getString("href");
+				String hallName = getHallName(hallURL);
 
-        return hallName;
-    }
+				session.setHall(hallName);
 
-    public short getStatusCode()
-    {
-        return statusCode;
-    }
+				result.add(session);
+			}
+		} catch (Exception e) {
+			statusCode = 1;
+		}
 
-    public void setStatusCode(short statusCode)
-    {
-        this.statusCode = statusCode;
-    }
+		return result;
+	}
 
+	private StringBuilder getWebContent(final String url)
+			throws InterruptedException {
+		final StringBuilder stringBuilder = new StringBuilder();
+
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				InputStream inputStream = null;
+
+				try {
+					HttpClient httpClient = new DefaultHttpClient();
+					HttpGet httpGet = new HttpGet(url);
+					HttpResponse httpResponse = httpClient.execute(httpGet);
+					StatusLine status = httpResponse.getStatusLine();
+					int statusCode = status.getStatusCode();
+
+					if (statusCode == 200) {
+						HttpEntity entity = httpResponse.getEntity();
+						inputStream = entity.getContent();
+						BufferedReader reader = new BufferedReader(
+								new InputStreamReader(inputStream));
+						String line = null;
+
+						while ((line = reader.readLine()) != null) {
+							stringBuilder.append(line);
+						}
+					}
+				} catch (Exception e) {
+					statusCode = 1;
+				} finally {
+					if (inputStream != null) {
+						try {
+							inputStream.close();
+						} catch (IOException e) {
+							// TODO
+						}
+					}
+				}
+			}
+		});
+
+		thread.start();
+		thread.join();
+
+		return stringBuilder;
+	}
+
+	private JSONObject getSpeakerContent(JSONObject submissionObject)
+			throws InterruptedException, JSONException {
+		String speakerURL = "";
+		JSONObject speaker = null;
+
+		speakerURL = submissionObject.getJSONObject(ResourceConstants.LINKS)
+				.getJSONObject(ResourceConstants.SPEAKER_RESOURCE)
+				.getString("href");
+		StringBuilder speakerContent = getWebContent(speakerURL);
+		speaker = new JSONObject(speakerContent.toString());
+
+		return speaker;
+	}
+
+	private String getHallName(String hallURL) throws InterruptedException,
+			JSONException {
+
+		JSONObject hall;
+		String hallName = null;
+
+		StringBuilder hallContent = getWebContent(hallURL);
+		hall = new JSONObject(hallContent.toString());
+		hallName = hall.getString("name");
+
+		return hallName;
+	}
+
+	public short getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(short statusCode) {
+		this.statusCode = statusCode;
+	}
 }
