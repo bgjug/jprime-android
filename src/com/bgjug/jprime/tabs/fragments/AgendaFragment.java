@@ -1,5 +1,10 @@
 package com.bgjug.jprime.tabs.fragments;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -15,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bgjug.jprime.model.Session;
+import com.bgjug.jprime.tabs.fragments.asynctasks.AgendaAsyncTask;
 import com.bgjug.jprime2016.R;
 
 public class AgendaFragment extends Fragment {
@@ -23,11 +30,12 @@ public class AgendaFragment extends Fragment {
 	private Button btnDay1;
 	private Button btnDay2;
 	private BaseAdapter adapterDay1;
-	private BaseAdapter adapterDay2;
+	private List<Session> allSessions;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		rootView = inflater.inflate(R.layout.fragment_agenda, container, false);
 
 		btnDay1 = (Button) rootView.findViewById(R.id.buttonDay1);
@@ -38,7 +46,7 @@ public class AgendaFragment extends Fragment {
 			public void onClick(View v) {
 				btnDay1.setEnabled(false);
 				btnDay2.setEnabled(true);
-				loadAgenda();
+				loadAgenda(allSessions, 1);
 			}
 
 		});
@@ -49,11 +57,16 @@ public class AgendaFragment extends Fragment {
 			public void onClick(View v) {
 				btnDay1.setEnabled(true);
 				btnDay2.setEnabled(false);
-				loadAgenda2();
+				loadAgenda(allSessions, 2);
 			}
 
 		});
-		loadAgenda();
+		if (allSessions == null || allSessions.isEmpty()) {
+			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
+					AgendaFragment.this);
+			agendaTask.execute("");
+		} else
+			loadAgenda(allSessions, 1);
 		return rootView;
 	}
 
@@ -62,7 +75,9 @@ public class AgendaFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	private void loadAgenda() {
+	public void loadAgenda(List<Session> result, int dayRequest) {
+		allSessions = result;
+		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
 
@@ -80,32 +95,31 @@ public class AgendaFragment extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				View agendaItemLayout = inflater.inflate(R.layout.agenda_item,
 						parent, false);
+				Session session = sessionsDay.get(position);
 
-				TextView sessionTime = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewTime);
-				TextView sessionName = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewSessionName);
-				TextView sessionHall = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewHall);
-				TextView sessionSpeaker = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewSpeaker);
-				TextView sessionInfo = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewSessionInfo);
+				applyTextViewFormat(
+						getTextView(agendaItemLayout, R.id.textViewTime),
+						getSessionTime(session.getStartTime()) + "-"
+								+ getSessionTime(session.getEndTime()),
+						Typeface.BOLD);
 
-				int testIndex = position + 8;
+				applyTextViewFormat(
+						getTextView(agendaItemLayout, R.id.textViewSessionName),
+						session.getName(), Typeface.BOLD);
 
-				sessionTime.setText(testIndex + ".00 - " + (testIndex + 1)
-						+ ".00");
-				sessionTime.setTypeface(null, Typeface.BOLD);
+				applyTextViewFormat(
+						getTextView(agendaItemLayout, R.id.textViewHall),
+						session.getHall(), Typeface.NORMAL);
 
-				sessionName.setText("Coding Culture ");
-				sessionName.setTypeface(null, Typeface.BOLD);
+				applyTextViewFormat(
+						getTextView(agendaItemLayout, R.id.textViewSpeaker),
+						session.getSpeaker().getfirstName() + " "
+								+ session.getSpeaker().getlastName(),
+						Typeface.ITALIC);
 
-				sessionHall.setText("Hall " + position + 1);
-				sessionSpeaker.setText("Sven Peters");
-				sessionSpeaker.setTypeface(null, Typeface.ITALIC);
-				sessionInfo
-						.setText("Imagine a culture where the input of the whole organization turns an individual idea into a user story in just a couple...");
+				applyTextViewFormat(
+						getTextView(agendaItemLayout, R.id.textViewSessionInfo),
+						getSessionShortDscr(session), Typeface.NORMAL);
 
 				agendaItemLayout.setOnClickListener(new OnClickListener() {
 
@@ -117,6 +131,29 @@ public class AgendaFragment extends Fragment {
 				});
 
 				return agendaItemLayout;
+			}
+
+			private String getSessionShortDscr(Session session) {
+				int index = session.getDescription().indexOf(" ", 55);
+				return session.getDescription().substring(0, index) + " ...";
+			}
+
+			void applyTextViewFormat(TextView textView, String textContent,
+					int typeFace) {
+				textView.setText(textContent);
+				textView.setTypeface(null, typeFace);
+			}
+
+			TextView getTextView(View view, int id) {
+				return (TextView) view.findViewById(id);
+			}
+
+			private String getSessionTime(Date date) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				int hours = calendar.get(Calendar.HOUR_OF_DAY);
+				int minutes = calendar.get(Calendar.MINUTE);
+				return String.valueOf(hours) + ":" + String.valueOf(minutes);
 			}
 
 			@Override
@@ -132,7 +169,7 @@ public class AgendaFragment extends Fragment {
 
 			@Override
 			public int getCount() {
-				return 3;
+				return sessionsDay.size();
 			}
 		};
 
@@ -140,84 +177,27 @@ public class AgendaFragment extends Fragment {
 		listViewAgenda.setSelection((Integer) adapterDay1.getItem(0));
 	}
 
-	private void loadAgenda2() {
-		ListView listViewAgenda = (ListView) rootView
-				.findViewById(R.id.agendaListView);
+	private List<Session> getSessionsDay(List<Session> result, int dayRequest) {
 
-		adapterDay2 = new BaseAdapter() {
-			int pointPosition = 0;
+		int firstDay = getFirstConferenceDay(result);
+		List<Session> resultSessions = new ArrayList<>();
+		for (Session session : result) {
+			if (dayRequest == 1 && session.getStartTime().getDay() == firstDay)
+				resultSessions.add(session);
+			else if (dayRequest == 2
+					&& session.getStartTime().getDay() != firstDay)
+				resultSessions.add(session);
+		}
+		return resultSessions;
+	}
 
-			public int getPointerPosition() {
-				return pointPosition;
-			}
-
-			@SuppressLint("ViewHolder")
-			@Override
-			public View getView(final int position, View convertView,
-					ViewGroup parent) {
-				LayoutInflater inflater = getActivity().getLayoutInflater();
-				View agendaItemLayout = inflater.inflate(R.layout.agenda_item,
-						parent, false);
-
-				TextView sessionTime = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewTime);
-				TextView sessionName = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewSessionName);
-				TextView sessionHall = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewHall);
-				TextView sessionSpeaker = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewSpeaker);
-				TextView sessionInfo = (TextView) agendaItemLayout
-						.findViewById(R.id.textViewSessionInfo);
-
-				int testIndex = position + 9;
-
-				sessionTime.setText(testIndex + ".00 - " + (testIndex + 1)
-						+ ".00");
-				sessionTime.setTypeface(null, Typeface.BOLD);
-
-				sessionName.setText("The Secrets of Concurrency");
-				sessionName.setTypeface(null, Typeface.BOLD);
-
-				sessionHall.setText("Hall " + position + 1);
-				sessionSpeaker.setText("Heinz Kabutz");
-				sessionSpeaker.setTypeface(null, Typeface.ITALIC);
-
-				sessionInfo
-						.setText("From the first version of Java, we have been able to create multiple threads. Initially, this was mostly used for making our GUIs more responsive. For example, we would read a file using...");
-
-				agendaItemLayout.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-					}
-
-				});
-
-				return agendaItemLayout;
-			}
-
-			@Override
-			public long getItemId(int position) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public Object getItem(int position) {
-				return getPointerPosition();
-			}
-
-			@Override
-			public int getCount() {
-				return 3;
-			}
-		};
-
-		listViewAgenda.setAdapter(adapterDay2);
-		listViewAgenda.setSelection((Integer) adapterDay2.getItem(0));
-
+	private int getFirstConferenceDay(List<Session> result) {
+		int firstConfDay = result.get(0).getStartTime().getDay();
+		for (Session session : result) {
+			if (firstConfDay > session.getStartTime().getDay())
+				firstConfDay = session.getStartTime().getDay();
+		}
+		return firstConfDay;
 	}
 
 	@Override

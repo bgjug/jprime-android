@@ -7,10 +7,14 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
-    <instrumentation android:name="android.test.InstrumentationTestRunner"
-    android:targetPackage="com.bgjug.jprime.tabs"
-    android:label="your tests label" />
-    
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:label="your tests label"
+        android:targetPackage="com.bgjug.jprime.tabs" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -26,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <uses-library android:name="android.test.runner" />
     </application>
 
