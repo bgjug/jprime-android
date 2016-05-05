@@ -7,7 +7,10 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -44,8 +47,8 @@ public class AgendaFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				btnDay1.setEnabled(false);
-				btnDay2.setEnabled(true);
+				btnDay1.setBackgroundResource(R.drawable.button_clicked);
+				btnDay2.setBackgroundResource(0);
 				loadAgenda(allSessions, 1);
 			}
 
@@ -55,8 +58,8 @@ public class AgendaFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				btnDay1.setEnabled(true);
-				btnDay2.setEnabled(false);
+				btnDay1.setBackgroundResource(0);
+				btnDay2.setBackgroundResource(R.drawable.button_clicked);
 				loadAgenda(allSessions, 2);
 			}
 

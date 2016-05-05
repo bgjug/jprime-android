@@ -25,6 +25,7 @@
         android:paddingRight="0dp"
         android:text="@string/day_1"
         android:textColor="@android:color/holo_blue_dark" />
+    
 	<View
 	    android:layout_width="0.5dp"
 	    android:layout_height="30dp"
