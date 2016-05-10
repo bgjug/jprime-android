@@ -78,15 +78,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5" >
 
-            <RatingBar
-                android:id="@+id/ratingBar1"
-                style="?android:attr/ratingBarStyleIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="false"
-                android:numStars="1"
-                android:rating="0"
-                android:stepSize="1" />
+            <com.bgjug.jprime.tabs.fragments.utils.ImageStarView
+                android:id="@+id/imageFavorite"
+                android:layout_width="36dp"
+                android:layout_height="58dp"
+                android:maxHeight="35dp"
+                android:minHeight="35dp"
+                android:src="@drawable/star_empty512" />
+
         </FrameLayout>
 
         <FrameLayout

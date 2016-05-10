@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Base64;
+
 import com.bgjug.jprime.model.Speaker;
 
 public class SpeakerHandler {
@@ -22,9 +24,9 @@ public class SpeakerHandler {
 		speaker.setBio(speakerJSON.getString("bio"));
 		speaker.setHeadline(speakerJSON.getString("headline"));
 		speaker.setTwitterURL(speakerJSON.getString("twitter"));
-		speaker.setPicture(speakerJSON.get("picture").toString().getBytes());
+		speaker.setPicture(Base64.decode(speakerJSON.getString("picture"),
+				Base64.DEFAULT));
 
 		return speaker;
 	}
-
 }

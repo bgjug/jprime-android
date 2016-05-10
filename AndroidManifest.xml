@@ -32,6 +32,8 @@
         </activity>
 
         <uses-library android:name="android.test.runner" />
+        <activity android:name="com.bgjug.jprime.tabs.fragments.SpeakerDetails"></activity>
+        <activity android:name="com.bgjug.jprime.tabs.fragments.SessionDetails"></activity>
     </application>
 
 </manifest>

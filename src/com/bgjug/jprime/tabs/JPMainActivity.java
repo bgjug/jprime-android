@@ -26,7 +26,7 @@ public class JPMainActivity extends FragmentActivity implements ActionBar.TabLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_jpmain);
-		        
+		
 		viewTabPager = (ViewPager) findViewById(R.id.tabs);
 		actionBar = getActionBar();
 		tabAdapter = new TabPagerAdapter(getSupportFragmentManager());	

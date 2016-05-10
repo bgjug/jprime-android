@@ -7,10 +7,8 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,19 +18,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bgjug.jprime.model.Session;
 import com.bgjug.jprime.tabs.fragments.asynctasks.AgendaAsyncTask;
+import com.bgjug.jprime.tabs.fragments.utils.ImageStarView;
 import com.bgjug.jprime2016.R;
 
-public class AgendaFragment extends Fragment {
+public class SessionsFragment extends Fragment {
 
 	private View rootView;
 	private Button btnDay1;
 	private Button btnDay2;
-	private BaseAdapter adapterDay1;
+	private BaseAdapter adapterAgenda;
 	private List<Session> allSessions;
 
 	@Override
@@ -64,9 +64,10 @@ public class AgendaFragment extends Fragment {
 			}
 
 		});
+		
 		if (allSessions == null || allSessions.isEmpty()) {
 			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
-					AgendaFragment.this);
+					SessionsFragment.this);
 			agendaTask.execute("");
 		} else
 			loadAgenda(allSessions, 1);
@@ -83,8 +84,8 @@ public class AgendaFragment extends Fragment {
 		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
-
-		adapterDay1 = new BaseAdapter() {
+		
+		adapterAgenda = new BaseAdapter() {
 			int pointPosition = 0;
 
 			public int getPointerPosition() {
@@ -98,7 +99,23 @@ public class AgendaFragment extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				View agendaItemLayout = inflater.inflate(R.layout.agenda_item,
 						parent, false);
-				Session session = sessionsDay.get(position);
+
+				final ImageStarView imageFav = (ImageStarView) agendaItemLayout
+						.findViewById(R.id.imageFavorite);
+				imageFav.setOnClickListener(new ImageView.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						imageFav.changeState();
+						if (imageFav.isActivated())
+							imageFav.setImageResource(R.drawable.star_fill512);
+						else
+							imageFav.setImageResource(R.drawable.star_empty512);
+					}
+
+				});
+
+				final Session session = sessionsDay.get(position);
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewTime),
@@ -128,7 +145,10 @@ public class AgendaFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-
+						Intent intent = new Intent(v.getContext(),
+								SessionDetails.class);
+						intent.putExtra("currentSession", session);
+						startActivity(intent);
 					}
 
 				});
@@ -176,14 +196,14 @@ public class AgendaFragment extends Fragment {
 			}
 		};
 
-		listViewAgenda.setAdapter(adapterDay1);
-		listViewAgenda.setSelection((Integer) adapterDay1.getItem(0));
+		listViewAgenda.setAdapter(adapterAgenda);
+		listViewAgenda.setSelection((Integer) adapterAgenda.getItem(0));
 	}
 
 	private List<Session> getSessionsDay(List<Session> result, int dayRequest) {
 
 		int firstDay = getFirstConferenceDay(result);
-		List<Session> resultSessions = new ArrayList<>();
+		List<Session> resultSessions = new ArrayList<Session>();
 		for (Session session : result) {
 			if (dayRequest == 1 && session.getStartTime().getDay() == firstDay)
 				resultSessions.add(session);

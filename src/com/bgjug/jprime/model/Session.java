@@ -1,8 +1,12 @@
 package com.bgjug.jprime.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
-public class Session
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Session implements Parcelable
 {  
     private Date startTime;
     private Date endTime;
@@ -11,6 +15,7 @@ public class Session
     private String description;
     private Speaker speaker;
     private Speaker coSpeaker;
+    private String startEndTime;
     
     public Session()
     {
@@ -100,4 +105,52 @@ public class Session
         this.coSpeaker = coSpeaker;
     }
     
+    public String getStartEndTime()
+    {
+        return startEndTime;
+    }
+
+    public void setStartEndTime(String startEndTime)
+    {
+        this.startEndTime = startEndTime;
+    }
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.name);
+		dest.writeString(getSessionTime(this.startTime) + " - " + getSessionTime(this.endTime));
+		dest.writeString(this.hall);
+		dest.writeString(this.description);
+	}
+
+	public Session(Parcel in) {
+		this.name = in.readString();
+		this.startEndTime = in.readString();
+		this.hall = in.readString();
+		this.description = in.readString();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+		public Session createFromParcel(Parcel in) {
+			return new Session(in);
+		}
+
+		public Session[] newArray(int size) {
+			return new Session[size];
+		}
+	};
+    
+	private String getSessionTime(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int hours = calendar.get(Calendar.HOUR_OF_DAY);
+		int minutes = calendar.get(Calendar.MINUTE);
+		return String.valueOf(hours) + ":" + String.valueOf(minutes);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 }

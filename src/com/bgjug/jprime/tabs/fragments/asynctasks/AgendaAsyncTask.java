@@ -2,20 +2,21 @@ package com.bgjug.jprime.tabs.fragments.asynctasks;
 
 import java.util.List;
 
-import com.bgjug.jprime.model.Session;
-import com.bgjug.jprime.rest.RestClient;
-import com.bgjug.jprime.tabs.fragments.AgendaFragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
+import com.bgjug.jprime.model.Session;
+import com.bgjug.jprime.rest.RestClient;
+import com.bgjug.jprime.tabs.fragments.SessionsFragment;
+
 public class AgendaAsyncTask extends AsyncTask<String, Void, List<Session>> {
 
-	private AgendaFragment agendaActivity;
+	private SessionsFragment agendaActivity;
 	private ProgressDialog progressD;
 	private RestClient jPrimeRC;
-	private List<Session> sessions;
+	private List<Session> sessions = null;
 
-	public AgendaAsyncTask(AgendaFragment agendaActivity) {
+	public AgendaAsyncTask(SessionsFragment agendaActivity) {
 		this.agendaActivity = agendaActivity;
 		this.jPrimeRC = new RestClient();
 	}
@@ -27,6 +28,7 @@ public class AgendaAsyncTask extends AsyncTask<String, Void, List<Session>> {
 		progressD.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 		progressD.show();
+
 	}
 
 	@Override
@@ -51,6 +53,7 @@ public class AgendaAsyncTask extends AsyncTask<String, Void, List<Session>> {
 
 		if (result != null) {
 			agendaActivity.loadAgenda(result, 1);
+			// SpeakersFragment.allSpeakers = getSpeakers(result);
 		}
 	}
 
