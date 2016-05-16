@@ -44,7 +44,7 @@ public class SpeakerDetails extends FragmentActivity {
 		final ImageView speakerImageView = (ImageView)findViewById(R.id.imageViewSpeakerDetailPicture);
 
 		speakerImageView.setImageBitmap(BitmapUtils
-				.getRoundedCornerBitmap(bmp, 10));
+				.getRoundedCornerBitmap(bmp, 150));
 		speakerImageView.post(new Runnable() {
 			@Override
 			public void run() {
@@ -52,9 +52,6 @@ public class SpeakerDetails extends FragmentActivity {
 				speakerImageView.setVisibility(View.VISIBLE);
 			}
 		});
-		
-		
-		
 	}
 	
 

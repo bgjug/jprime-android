@@ -64,7 +64,7 @@ public class SpeakersFragment extends Fragment {
 
 				TextView speakerName = (TextView) speakerItemLayout
 						.findViewById(R.id.textViewSpeakerName);
-				speakerName.setText(speaker.getfirstName());
+				speakerName.setText(speaker.getfirstName() + " " + speaker.getlastName());
 				speakerName.setTypeface(null, Typeface.BOLD);
 
 				TextView speakerBio = (TextView) speakerItemLayout
@@ -79,6 +79,8 @@ public class SpeakersFragment extends Fragment {
 						.findViewById(R.id.imageViewSpeakerPicture);
 				speakerImageView.setImageBitmap(BitmapUtils
 						.getRoundedCornerBitmap(bmp, 10));
+				speakerImageView.setMinimumHeight(163);
+				speakerImageView.setMinimumWidth(140);
 				speakerImageView.post(new Runnable() {
 					@Override
 					public void run() {
