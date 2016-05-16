@@ -18,7 +18,7 @@ public class AgendaAsyncTask extends AsyncTask<String, Void, List<Session>> {
 
 	public AgendaAsyncTask(SessionsFragment agendaActivity) {
 		this.agendaActivity = agendaActivity;
-		this.jPrimeRC = new RestClient();
+		this.jPrimeRC = RestClient.getInstance();
 	}
 
 	@Override

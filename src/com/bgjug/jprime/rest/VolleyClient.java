@@ -41,4 +41,14 @@ public class VolleyClient {
 
 		return future.get();
 	}
+	
+	public void stopReuestQueue()
+	{
+		mRequestQueue.stop();
+	}
+	
+	public void startReuestQueue()
+	{
+		mRequestQueue.stop(); 
+	}
 }

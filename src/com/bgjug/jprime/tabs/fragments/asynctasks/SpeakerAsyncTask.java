@@ -18,7 +18,7 @@ public class SpeakerAsyncTask extends AsyncTask<String, Void, List<Speaker>> {
 
 	public SpeakerAsyncTask(SpeakersFragment speakerFragment) {
 		this.speakerFragment = speakerFragment;
-		this.jPrimeRC = new RestClient();
+		this.jPrimeRC = RestClient.getInstance();
 	}
 
 	@Override

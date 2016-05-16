@@ -16,13 +16,23 @@ public class RestClient {
 	private short statusCode = 0;
 	private static JSONArray sessionsArray = null;
 	private VolleyClient volleyClient = null;
-	private static List<Session> sessionsList = null;
-	private static List<Speaker> speakersList = null;
+	private List<Session> sessionsList = null;
+	private List<Speaker> speakersList = null;
+	private static RestClient instance = null;
 
-	public RestClient() {
+	private RestClient() {
 		sessionsList = new ArrayList<Session>();
 		speakersList = new ArrayList<Speaker>();
 		volleyClient = new VolleyClient();
+	}
+	
+	public static RestClient getInstance()
+	{
+		if(instance == null){
+			instance = new RestClient();
+		}
+		
+		return instance;
 	}
 
 	private JSONArray initSessions() {
@@ -63,6 +73,7 @@ public class RestClient {
 		if (!sessionsList.isEmpty()) {
 			return sessionsList;
 		}
+		
 		initSessions();
 
 		try {
@@ -135,6 +146,16 @@ public class RestClient {
 		return hallName;
 	}
 
+	public void stopVolleyRequestQueue()
+	{
+		volleyClient.stopReuestQueue();
+	}
+	
+	public void startVolleyReuestQueue()
+	{
+		volleyClient.startReuestQueue();
+	}
+	
 	public short getStatusCode() {
 		return statusCode;
 	}
