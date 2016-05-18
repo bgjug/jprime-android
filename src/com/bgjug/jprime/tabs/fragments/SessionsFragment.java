@@ -42,6 +42,7 @@ public class SessionsFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_agenda, container, false);
 
 		btnDay1 = (Button) rootView.findViewById(R.id.buttonDay1);
+		btnDay1.setBackgroundResource(R.drawable.button_clicked); 
 		btnDay2 = (Button) rootView.findViewById(R.id.buttonDay2);
 		btnDay1.setOnClickListener(new ImageButton.OnClickListener() {
 
@@ -64,7 +65,7 @@ public class SessionsFragment extends Fragment {
 			}
 
 		});
-		
+
 		if (allSessions == null || allSessions.isEmpty()) {
 			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
 					SessionsFragment.this);
@@ -84,7 +85,7 @@ public class SessionsFragment extends Fragment {
 		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
-		
+
 		adapterAgenda = new BaseAdapter() {
 			int pointPosition = 0;
 
@@ -175,8 +176,9 @@ public class SessionsFragment extends Fragment {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(date);
 				int hours = calendar.get(Calendar.HOUR_OF_DAY);
-				int minutes = calendar.get(Calendar.MINUTE);
-				return String.valueOf(hours) + ":" + String.valueOf(minutes);
+				String minutes = calendar.get(Calendar.MINUTE) == 0 ? "00"
+						: Integer.toString(calendar.get(Calendar.MINUTE));
+				return Integer.toString(hours) + ":" + minutes;
 			}
 
 			@Override

@@ -11,7 +11,7 @@ public class VenueHall {
 			+ "@42.6578803,23.3124705,17z/data=!3m1!4b1!4m5!3m4!1s0x40aa845dd5e00623:0xa182f7bbf955f668!8m2!3d42.6578803!4d23.3146592?hl=en";
 	public static final String DATE = "26th and 27th May 2016";
 	public static final String LOCATION = "Paradise Center bulevard Cherni vrah 100";
-	public static final String TITLE = "jPrime is held on 26th and 27th May 2016 in Sofia Event Center";
+	public static final String TITLE = "Java Prime Time in Sofia is held on 26th and 27th May 2016 in Sofia Event Center";
 	public static final String EMAIL = "conference@jprime.io";
 
 }
