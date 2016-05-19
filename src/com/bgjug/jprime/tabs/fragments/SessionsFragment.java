@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -77,7 +76,7 @@ public class SessionsFragment extends Fragment {
 
 		});
 
-		dbHelper = new DatabaseHelper(this.getActivity(), 4);
+		dbHelper = new DatabaseHelper(this.getActivity(), 5);
 		allSessions = dbHelper.getSessions(fav);
 
 		if ((allSessions == null || allSessions.isEmpty()) && !fav) {

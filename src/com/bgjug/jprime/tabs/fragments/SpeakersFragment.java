@@ -35,7 +35,7 @@ public class SpeakersFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_speakers, container,
 				false);
 
-		dbHelper = new DatabaseHelper(this.getActivity(), 4);
+		dbHelper = new DatabaseHelper(this.getActivity(), 5);
 		allSpeakers = dbHelper.getSpeakers();
 		// An AsyncTask is implemented and it uses getSpeakers from RestClient
 		// but now the resource is empty.
