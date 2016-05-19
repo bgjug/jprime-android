@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return cv;
 	}
 
-	public List<Session> getSessions() {
+	public List<Session> getSessions(boolean requestFav) {
 		SQLiteDatabase db = getReadableDatabase();
 		String[] columns = new String[] { FIELD_NAME, FIELD_DESCRIPTION,
 				FIELD_SPEAKER, FIELD_COSPEAKER, FIELD_HALL, FIELD_STARTTIME,
@@ -82,11 +82,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		List<Session> result = new ArrayList<Session>();
 		while (c.moveToNext()) {
+			
+			boolean isFav = c.getInt(7) == 1;
+			
 			Speaker speaker = new Speaker();
 			speaker.setfirstName(c.getString(2));
 			Speaker coSpeaker = new Speaker();
 			coSpeaker.setfirstName(c.getString(3));
 
+			if(requestFav  && !isFav)
+				continue;
 			result.add(new Session(new Date(Long.parseLong(c.getString(5))),
 					new Date(Long.parseLong(c.getString(6))), c.getString(4), c
 							.getString(0), c.getString(1), speaker, coSpeaker, c.getInt(7)));

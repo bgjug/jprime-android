@@ -20,7 +20,7 @@ public class JPMainActivity extends FragmentActivity implements ActionBar.TabLis
 	private TabPagerAdapter tabAdapter;
 	private ActionBar actionBar;
 	
-	private String[] tabsArray = {"Agenda", "Speakers", "Venue", "MyAgenda"};
+	private String[] tabsArray = {"Agenda", "Speakers", "Venue", "Favorites"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

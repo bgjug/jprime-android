@@ -3,59 +3,68 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-<LinearLayout
-    android:id="@+id/linearLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_horizontal"
-    android:background="@android:color/holo_orange_light"
-    android:padding="6dp"
-    android:weightSum="2">
 
-    <Button
-        android:id="@+id/buttonDay1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@null"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:text="@string/day_1"
-        android:textColor="@android:color/holo_blue_dark" />
-    
-	<View
-	    android:layout_width="0.5dp"
-	    android:layout_height="30dp"
-	    android:background="@android:color/holo_blue_dark" />
-    <Button
-        android:id="@+id/buttonDay2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@null"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:text="Day 2"
-        android:textColor="@android:color/holo_blue_dark" />
-    
-    
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_light"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:weightSum="2" >
 
-</LinearLayout> 
-<View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/holo_blue_dark"/>
+        <Button
+            android:id="@+id/buttonDay1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:text="@string/day_1"
+            android:textColor="@android:color/holo_blue_dark" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="30dp"
+            android:background="@android:color/holo_blue_dark" />
+
+        <Button
+            android:id="@+id/buttonDay2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:text="@string/day_2"
+            android:textColor="@android:color/holo_blue_dark" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_blue_dark" />
+
+    <TextView
+        android:id="@+id/textView_noItems"
+        android:layout_width="fill_parent"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/holo_blue_dark"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <ListView
         android:id="@+id/agendaListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:padding="16dip" >
-
     </ListView>
-        
+
 </LinearLayout>
-   

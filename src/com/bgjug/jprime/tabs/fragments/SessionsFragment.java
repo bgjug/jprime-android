@@ -8,7 +8,9 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -36,6 +38,11 @@ public class SessionsFragment extends Fragment {
 	private BaseAdapter adapterAgenda;
 	private List<Session> allSessions;
 	private DatabaseHelper dbHelper;
+	private boolean fav;
+
+	public SessionsFragment(boolean fav) {
+		this.fav = fav;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,14 +51,15 @@ public class SessionsFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_agenda, container, false);
 
 		btnDay1 = (Button) rootView.findViewById(R.id.buttonDay1);
-		btnDay1.setBackgroundResource(R.drawable.button_clicked); 
 		btnDay2 = (Button) rootView.findViewById(R.id.buttonDay2);
+		changeButtonClicked(btnDay1, btnDay2);
 		btnDay1.setOnClickListener(new ImageButton.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				btnDay1.setBackgroundResource(R.drawable.button_clicked);
-				btnDay2.setBackgroundResource(0);
+				// btnDay1.setBackgroundResource(R.drawable.button_clicked);
+				// btnDay2.setBackgroundResource(0);
+				changeButtonClicked(btnDay1, btnDay2);
 				loadAgenda(allSessions, 1, false);
 			}
 
@@ -61,17 +69,18 @@ public class SessionsFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				btnDay1.setBackgroundResource(0);
-				btnDay2.setBackgroundResource(R.drawable.button_clicked);
+				// btnDay1.setBackgroundResource(0);
+				// setBackgroundResource(R.drawable.button_clicked);
+				changeButtonClicked(btnDay2, btnDay1);
 				loadAgenda(allSessions, 2, false);
 			}
 
 		});
 
 		dbHelper = new DatabaseHelper(this.getActivity(), 4);
-		allSessions = dbHelper.getSessions();
-		
-		if (allSessions == null || allSessions.isEmpty()) {
+		allSessions = dbHelper.getSessions(fav);
+
+		if ((allSessions == null || allSessions.isEmpty()) && !fav) {
 			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
 					SessionsFragment.this);
 			agendaTask.execute("");
@@ -85,15 +94,26 @@ public class SessionsFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	public void loadAgenda(List<Session> result, int dayRequest, boolean dbInsert) {
+	public void loadAgenda(List<Session> result, int dayRequest,
+			boolean dbInsert) {
 		allSessions = result;
-		
-		if (dbInsert)
-			dbHelper.addSessions(result);
-		
+
 		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
+
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
+		TextView noItem = (TextView) rootView
+				.findViewById(R.id.textView_noItems);
+		if (sessionsDay == null || sessionsDay.isEmpty()) {
+			noItem.setVisibility(View.VISIBLE);
+			noItem.setText("There are no sessions");
+			listViewAgenda.setAdapter(null);
+			return;
+		}
+		noItem.setVisibility(View.GONE);
+
+		if (dbInsert)
+			dbHelper.addSessions(result);
 
 		adapterAgenda = new BaseAdapter() {
 			int pointPosition = 0;
@@ -111,27 +131,29 @@ public class SessionsFragment extends Fragment {
 						parent, false);
 				final Session session = sessionsDay.get(position);
 
-				final ImageStarView imageFav = (ImageStarView) agendaItemLayout
+				ImageStarView imageFav = (ImageStarView) agendaItemLayout
 						.findViewById(R.id.imageFavorite);
-				imageFav.setImageResource(session.getIsFavorite() == 0 ? R.drawable.star_empty512 : R.drawable.star_fill512);
+				imageFav.setImageResource(session.getIsFavorite() == 0 ? R.drawable.star_empty512
+						: R.drawable.star_fill512);
+				imageFav.setActive(session.getIsFavorite() != 0);
 				imageFav.setOnClickListener(new ImageView.OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						imageFav.changeState();
-						if (imageFav.isActivated())
-						{
-							imageFav.setImageResource(R.drawable.star_fill512);
+						ImageStarView image = ((ImageStarView) v);
+						image.changeState();
+						if (image.isActivated()) {
+							image.setImageResource(R.drawable.star_fill512);
 							dbHelper.updateIsFavotire(session, 1);
-						}
-						else{
-							imageFav.setImageResource(R.drawable.star_empty512);
+							session.setIsFavorite(1);
+						} else {
+							image.setImageResource(R.drawable.star_empty512);
 							dbHelper.updateIsFavotire(session, 0);
+							session.setIsFavorite(0);
 						}
 					}
 
 				});
-
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewTime),
@@ -149,8 +171,7 @@ public class SessionsFragment extends Fragment {
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewSpeaker),
-						getSpeakerFullName(session),
-						Typeface.ITALIC);
+						getSpeakerFullName(session), Typeface.ITALIC);
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewSessionInfo),
@@ -170,7 +191,7 @@ public class SessionsFragment extends Fragment {
 
 				return agendaItemLayout;
 			}
-			
+
 			private String getSpeakerFullName(final Session session) {
 				if (session.getSpeaker().getlastName() == null)
 					return session.getSpeaker().getfirstName();
@@ -225,8 +246,10 @@ public class SessionsFragment extends Fragment {
 
 	private List<Session> getSessionsDay(List<Session> result, int dayRequest) {
 
-		int firstDay = getFirstConferenceDay(result);
 		List<Session> resultSessions = new ArrayList<Session>();
+		if (result == null || result.isEmpty())
+			return resultSessions;
+		int firstDay = getFirstConferenceDay(result);
 		for (Session session : result) {
 			if (dayRequest == 1 && session.getStartTime().getDay() == firstDay)
 				resultSessions.add(session);
@@ -235,6 +258,12 @@ public class SessionsFragment extends Fragment {
 				resultSessions.add(session);
 		}
 		return resultSessions;
+	}
+
+	private void changeButtonClicked(Button clickedButton, Button otherButton) {
+		clickedButton.setTextColor(getResources().getColor(
+				android.R.color.holo_blue_dark));
+		otherButton.setTextColor(Color.GRAY);
 	}
 
 	private int getFirstConferenceDay(List<Session> result) {

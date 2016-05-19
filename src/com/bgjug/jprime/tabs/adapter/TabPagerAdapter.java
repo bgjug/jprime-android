@@ -24,7 +24,7 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 		switch (index) {
 		case 0:
 			// Agenda fragment activity
-			return new SessionsFragment();
+			return new SessionsFragment(false);
 		case 1:
 			// Speakers fragment activity
 			return new SpeakersFragment();
@@ -33,7 +33,7 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 			return new VenueFragment();
 		case 3:
 			// My Agenda fragment activity
-			return new MyAgendaFragment();
+			return new SessionsFragment(true);
 		}
 
 		return null;
@@ -42,7 +42,7 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getCount() {
 		// get item count - equal to number of tabs
-		return 3;
+		return 4;
 	}
 
 }
