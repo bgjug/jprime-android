@@ -16,6 +16,7 @@ public class Session implements Parcelable
     private Speaker speaker;
     private Speaker coSpeaker;
     private String startEndTime;
+	private Integer isFavorite = 0;
     
     public Session()
     {
@@ -23,7 +24,7 @@ public class Session implements Parcelable
     }
 
     public Session(Date startTime, Date endTime, String hall, String name, String description,
-        Speaker speaker, Speaker coSpeaker)
+        Speaker speaker, Speaker coSpeaker, Integer isFavorite)
     {
         super();
         this.startTime = startTime;
@@ -33,7 +34,14 @@ public class Session implements Parcelable
         this.description = description;
         this.speaker = speaker;
         this.coSpeaker = coSpeaker;
+        this.isFavorite = isFavorite;
     }
+    
+    public Session(Date startTime, Date endTime, String hall, String name, String description,
+            Speaker speaker, Speaker coSpeaker)
+        {
+            this(startTime, endTime, hall, name, description, speaker, coSpeaker, 0);
+        }
 
     public Date getStartTime()
     {
@@ -114,6 +122,14 @@ public class Session implements Parcelable
     {
         this.startEndTime = startEndTime;
     }
+
+	public Integer getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(Integer isFavorite) {
+		this.isFavorite = isFavorite;
+	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {

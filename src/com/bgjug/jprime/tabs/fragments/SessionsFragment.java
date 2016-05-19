@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bgjug.jprime.model.Session;
+import com.bgjug.jprime.persistance.DatabaseHelper;
 import com.bgjug.jprime.tabs.fragments.asynctasks.AgendaAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.ImageStarView;
 import com.bgjug.jprime2016.R;
@@ -34,6 +35,7 @@ public class SessionsFragment extends Fragment {
 	private Button btnDay2;
 	private BaseAdapter adapterAgenda;
 	private List<Session> allSessions;
+	private DatabaseHelper dbHelper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +52,7 @@ public class SessionsFragment extends Fragment {
 			public void onClick(View v) {
 				btnDay1.setBackgroundResource(R.drawable.button_clicked);
 				btnDay2.setBackgroundResource(0);
-				loadAgenda(allSessions, 1);
+				loadAgenda(allSessions, 1, false);
 			}
 
 		});
@@ -61,17 +63,20 @@ public class SessionsFragment extends Fragment {
 			public void onClick(View v) {
 				btnDay1.setBackgroundResource(0);
 				btnDay2.setBackgroundResource(R.drawable.button_clicked);
-				loadAgenda(allSessions, 2);
+				loadAgenda(allSessions, 2, false);
 			}
 
 		});
 
+		dbHelper = new DatabaseHelper(this.getActivity(), 4);
+		allSessions = dbHelper.getSessions();
+		
 		if (allSessions == null || allSessions.isEmpty()) {
 			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
 					SessionsFragment.this);
 			agendaTask.execute("");
 		} else
-			loadAgenda(allSessions, 1);
+			loadAgenda(allSessions, 1, false);
 		return rootView;
 	}
 
@@ -80,8 +85,12 @@ public class SessionsFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	public void loadAgenda(List<Session> result, int dayRequest) {
+	public void loadAgenda(List<Session> result, int dayRequest, boolean dbInsert) {
 		allSessions = result;
+		
+		if (dbInsert)
+			dbHelper.addSessions(result);
+		
 		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
@@ -100,23 +109,29 @@ public class SessionsFragment extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				View agendaItemLayout = inflater.inflate(R.layout.agenda_item,
 						parent, false);
+				final Session session = sessionsDay.get(position);
 
 				final ImageStarView imageFav = (ImageStarView) agendaItemLayout
 						.findViewById(R.id.imageFavorite);
+				imageFav.setImageResource(session.getIsFavorite() == 0 ? R.drawable.star_empty512 : R.drawable.star_fill512);
 				imageFav.setOnClickListener(new ImageView.OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						imageFav.changeState();
 						if (imageFav.isActivated())
+						{
 							imageFav.setImageResource(R.drawable.star_fill512);
-						else
+							dbHelper.updateIsFavotire(session, 1);
+						}
+						else{
 							imageFav.setImageResource(R.drawable.star_empty512);
+							dbHelper.updateIsFavotire(session, 0);
+						}
 					}
 
 				});
 
-				final Session session = sessionsDay.get(position);
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewTime),
@@ -134,8 +149,7 @@ public class SessionsFragment extends Fragment {
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewSpeaker),
-						session.getSpeaker().getfirstName() + " "
-								+ session.getSpeaker().getlastName(),
+						getSpeakerFullName(session),
 						Typeface.ITALIC);
 
 				applyTextViewFormat(
@@ -155,6 +169,13 @@ public class SessionsFragment extends Fragment {
 				});
 
 				return agendaItemLayout;
+			}
+			
+			private String getSpeakerFullName(final Session session) {
+				if (session.getSpeaker().getlastName() == null)
+					return session.getSpeaker().getfirstName();
+				return session.getSpeaker().getfirstName() + " "
+						+ session.getSpeaker().getlastName();
 			}
 
 			private String getSessionShortDscr(Session session) {

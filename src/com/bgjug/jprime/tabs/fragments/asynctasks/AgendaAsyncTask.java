@@ -52,7 +52,7 @@ public class AgendaAsyncTask extends AsyncTask<String, Void, List<Session>> {
 		}
 
 		if (result != null) {
-			agendaActivity.loadAgenda(result, 1);
+			agendaActivity.loadAgenda(result, 1, true);
 			// SpeakersFragment.allSpeakers = getSpeakers(result);
 		}
 	}

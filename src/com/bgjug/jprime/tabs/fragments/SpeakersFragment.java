@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bgjug.jprime.model.Speaker;
+import com.bgjug.jprime.persistance.DatabaseHelper;
 import com.bgjug.jprime.tabs.fragments.asynctasks.SpeakerAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.BitmapUtils;
 import com.bgjug.jprime2016.R;
@@ -25,6 +26,7 @@ import com.bgjug.jprime2016.R;
 public class SpeakersFragment extends Fragment {
 	private View rootView;
 	private BaseAdapter adapterSpeaker;
+	private DatabaseHelper dbHelper;
 	public static List<Speaker> allSpeakers;
 
 	@Override
@@ -33,6 +35,8 @@ public class SpeakersFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_speakers, container,
 				false);
 
+		dbHelper = new DatabaseHelper(this.getActivity(), 4);
+		allSpeakers = dbHelper.getSpeakers();
 		// An AsyncTask is implemented and it uses getSpeakers from RestClient
 		// but now the resource is empty.
 		// Use a hack for now. Get the speakers from Sessions (getSessions)
@@ -41,13 +45,16 @@ public class SpeakersFragment extends Fragment {
 					SpeakersFragment.this);
 			speakersTask.execute("");
 		} else
-			loadSpeakers(allSpeakers);
+			loadSpeakers(allSpeakers, false);
 
 		return rootView;
 	}
 
-	public void loadSpeakers(List<Speaker> allSpeakers) {
+	public void loadSpeakers(List<Speaker> allSpeakers, boolean dbInsert) {
 		final List<Speaker> speakers = SpeakersFragment.allSpeakers = allSpeakers;
+		if(dbInsert)
+			dbHelper.addSpeakers(allSpeakers);
+		
 		final ListView listViewSpeaker = (ListView) rootView
 				.findViewById(R.id.speakerListView);
 		adapterSpeaker = new BaseAdapter() {

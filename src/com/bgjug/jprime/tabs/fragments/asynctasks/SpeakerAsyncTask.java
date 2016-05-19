@@ -54,7 +54,7 @@ public class SpeakerAsyncTask extends AsyncTask<String, Void, List<Speaker>> {
 
 		if (result != null) {
 			SpeakersFragment.allSpeakers = result;
-			if(speakerFragment != null) speakerFragment.loadSpeakers(result);
+			if(speakerFragment != null) speakerFragment.loadSpeakers(result, true);
 		}
 	}
 }
