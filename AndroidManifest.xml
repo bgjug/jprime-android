@@ -22,8 +22,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.bgjug.jprime.tabs.JPMainActivity"
-            android:label="@string/app_name" >
+            android:name="com.bgjug.jprime.activities.SplashScreen"
+            android:theme="@style/SplashScreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,8 +32,13 @@
         </activity>
 
         <uses-library android:name="android.test.runner" />
-        <activity android:name="com.bgjug.jprime.tabs.fragments.SpeakerDetails"></activity>
-        <activity android:name="com.bgjug.jprime.tabs.fragments.SessionDetails"></activity>
+
+        <activity android:name="com.bgjug.jprime.tabs.JPMainActivity" >
+        </activity>
+        <activity android:name="com.bgjug.jprime.tabs.fragments.SpeakerDetails" >
+        </activity>
+        <activity android:name="com.bgjug.jprime.tabs.fragments.SessionDetails" >
+        </activity>
     </application>
 
 </manifest>

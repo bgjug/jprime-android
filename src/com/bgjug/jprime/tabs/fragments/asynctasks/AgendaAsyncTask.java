@@ -50,7 +50,7 @@ public class AgendaAsyncTask extends AsyncTask<String, Void, List<Session>> {
 		if (progressD != null) {
 			progressD.dismiss();
 		}
-
+		
 		if (result != null) {
 			agendaActivity.loadAgenda(result, 1, true);
 			// SpeakersFragment.allSpeakers = getSpeakers(result);

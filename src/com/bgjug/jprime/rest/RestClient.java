@@ -1,5 +1,6 @@
 package com.bgjug.jprime.rest;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -13,7 +14,11 @@ import com.bgjug.jprime.model.Session;
 import com.bgjug.jprime.model.Speaker;
 
 public class RestClient {
-	private short statusCode = 0;
+
+	private static final String ERROR_GETTING_CONTENT = "Unfortunately error occured while trying to get conntent from Jprime";
+	private static final String ERROR_NO_CONNECTION = "There is no network connection right now";
+	private static final String ERROR_NO_CONTENT = "Can not get content from Jprime";
+	private String statusMessage;
 	private static JSONArray sessionsArray = null;
 	private VolleyClient volleyClient = null;
 	private List<Session> sessionsList = null;
@@ -25,32 +30,26 @@ public class RestClient {
 		speakersList = new ArrayList<Speaker>();
 		volleyClient = new VolleyClient();
 	}
-	
-	public static RestClient getInstance()
-	{
-		if(instance == null){
+
+	public static RestClient getInstance() {
+		if (instance == null) {
 			instance = new RestClient();
 		}
-		
+
 		return instance;
 	}
 
-	private JSONArray initSessions() {
+	private JSONArray initSessions() throws InterruptedException,
+			ExecutionException, TimeoutException, JSONException {
 
 		JSONObject sessionsEntity = null;
-		try {
 
-			sessionsEntity = volleyClient
-					.requestJSON(ResourceConstants.JPRIME_URL + "/"
-							+ ResourceConstants.SESSIONS_RESOURCE);
+		sessionsEntity = volleyClient.requestJSON(ResourceConstants.JPRIME_URL
+				+ "/" + ResourceConstants.SESSIONS_RESOURCE);
 
-			sessionsArray = sessionsEntity.getJSONObject(
-					ResourceConstants.EMBEDDED).getJSONArray(
-					ResourceConstants.SESSIONS_RESOURCE);
-
-		} catch (Exception e) {
-			statusCode = 1;
-		}
+		sessionsArray = sessionsEntity
+				.getJSONObject(ResourceConstants.EMBEDDED).getJSONArray(
+						ResourceConstants.SESSIONS_RESOURCE);
 
 		return sessionsArray;
 	}
@@ -65,6 +64,7 @@ public class RestClient {
 	}
 
 	public List<Session> getSessions() {
+
 		Session session = null;
 		Speaker speaker = null;
 		SessionHandler sessionHandler = null;
@@ -73,10 +73,9 @@ public class RestClient {
 		if (!sessionsList.isEmpty()) {
 			return sessionsList;
 		}
-		
-		initSessions();
 
 		try {
+			initSessions();
 
 			for (int i = 0; i < sessionsArray.length(); i++) {
 
@@ -106,14 +105,28 @@ public class RestClient {
 
 				sessionsList.add(session);
 			}
-		} catch (Exception e) {
-			statusCode = 1;
+
+		} catch (InterruptedException e) {
+			statusMessage = ERROR_GETTING_CONTENT;
+		} catch (ExecutionException e) {
+			statusMessage = ERROR_GETTING_CONTENT;
+		} catch (TimeoutException e) {
+			statusMessage = ERROR_NO_CONNECTION;
+		} catch (JSONException e) {
+			statusMessage = ERROR_GETTING_CONTENT;
+		} catch (MalformedURLException e) {
+			statusMessage = ERROR_GETTING_CONTENT;
+		}
+
+		if (sessionsList.isEmpty() && statusMessage == null) {
+			statusMessage = ERROR_NO_CONTENT;
 		}
 
 		return sessionsList;
 	}
 
 	public void reloadContent() {
+		statusMessage = null;
 		sessionsList = new ArrayList<Session>();
 		speakersList = new ArrayList<Speaker>();
 	}
@@ -146,21 +159,19 @@ public class RestClient {
 		return hallName;
 	}
 
-	public void stopVolleyRequestQueue()
-	{
+	public void stopVolleyRequestQueue() {
 		volleyClient.stopReuestQueue();
 	}
-	
-	public void startVolleyReuestQueue()
-	{
+
+	public void startVolleyReuestQueue() {
 		volleyClient.startReuestQueue();
 	}
-	
-	public short getStatusCode() {
-		return statusCode;
+
+	public String getStatusCode() {
+		return statusMessage;
 	}
 
-	public void setStatusCode(short statusCode) {
-		this.statusCode = statusCode;
+	public void setStatusCode(String statusMessage) {
+		this.statusMessage = statusMessage;
 	}
 }

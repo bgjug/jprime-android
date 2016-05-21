@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bgjug.jprime.model.Session;
 import com.bgjug.jprime.persistance.DatabaseHelper;
@@ -80,11 +81,16 @@ public class SessionsFragment extends Fragment {
 		allSessions = dbHelper.getSessions(fav);
 
 		if ((allSessions == null || allSessions.isEmpty()) && !fav) {
+			// show alert dialog that shows to reload content
+			
 			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
 					SessionsFragment.this);
 			agendaTask.execute("");
-		} else
+			
+		} else{
 			loadAgenda(allSessions, 1, false);
+		}
+		
 		return rootView;
 	}
 
