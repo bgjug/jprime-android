@@ -22,11 +22,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bgjug.jprime.model.Session;
 import com.bgjug.jprime.persistance.DatabaseHelper;
-import com.bgjug.jprime.tabs.fragments.asynctasks.AgendaAsyncTask;
+import com.bgjug.jprime.rest.RestClient;
+import com.bgjug.jprime.tabs.fragments.asynctasks.ReloadAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.ImageStarView;
 import com.bgjug.jprime2016.R;
 
@@ -35,6 +35,8 @@ public class SessionsFragment extends Fragment {
 	private View rootView;
 	private Button btnDay1;
 	private Button btnDay2;
+	private Button retryButton;
+	private TextView errorText;
 	private BaseAdapter adapterAgenda;
 	private List<Session> allSessions;
 	private DatabaseHelper dbHelper;
@@ -60,7 +62,7 @@ public class SessionsFragment extends Fragment {
 				// btnDay1.setBackgroundResource(R.drawable.button_clicked);
 				// btnDay2.setBackgroundResource(0);
 				changeButtonClicked(btnDay1, btnDay2);
-				loadAgenda(allSessions, 1, false);
+				loadAgenda(allSessions, 1);
 			}
 
 		});
@@ -72,7 +74,7 @@ public class SessionsFragment extends Fragment {
 				// btnDay1.setBackgroundResource(0);
 				// setBackgroundResource(R.drawable.button_clicked);
 				changeButtonClicked(btnDay2, btnDay1);
-				loadAgenda(allSessions, 2, false);
+				loadAgenda(allSessions, 2);
 			}
 
 		});
@@ -80,18 +82,34 @@ public class SessionsFragment extends Fragment {
 		dbHelper = new DatabaseHelper(this.getActivity(), 5);
 		allSessions = dbHelper.getSessions(fav);
 
-		if ((allSessions == null || allSessions.isEmpty()) && !fav) {
-			// show alert dialog that shows to reload content
+		if (allSessions.isEmpty() && !fav) {
+
+			reloadContent();
 			
-			AgendaAsyncTask agendaTask = new AgendaAsyncTask(
-					SessionsFragment.this);
-			agendaTask.execute("");
-			
-		} else{
-			loadAgenda(allSessions, 1, false);
+		} else {
+			loadAgenda(allSessions, 1);
 		}
-		
+
 		return rootView;
+	}
+
+	private void reloadContent() {
+		
+		errorText = (TextView) rootView.findViewById(R.id.errorMessageAgenda);
+		errorText.setText(RestClient.getInstance().getStatusMessage());
+		retryButton = (Button) rootView.findViewById(R.id.retryButtonAgenda);
+		retryButton.setVisibility(0);
+		
+		retryButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				ReloadAsyncTask reloadtask = new ReloadAsyncTask(
+						SessionsFragment.this);
+				reloadtask.execute("");
+			}
+		});
 	}
 
 	@Override
@@ -99,26 +117,13 @@ public class SessionsFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	public void loadAgenda(List<Session> result, int dayRequest,
-			boolean dbInsert) {
+	public void loadAgenda(List<Session> result, int dayRequest) {
 		allSessions = result;
 
 		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
 
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
-		TextView noItem = (TextView) rootView
-				.findViewById(R.id.textView_noItems);
-		if (sessionsDay == null || sessionsDay.isEmpty()) {
-			noItem.setVisibility(View.VISIBLE);
-			noItem.setText("There are no sessions");
-			listViewAgenda.setAdapter(null);
-			return;
-		}
-		noItem.setVisibility(View.GONE);
-
-		if (dbInsert)
-			dbHelper.addSessions(result);
 
 		adapterAgenda = new BaseAdapter() {
 			int pointPosition = 0;
@@ -284,5 +289,4 @@ public class SessionsFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 	}
-
 }

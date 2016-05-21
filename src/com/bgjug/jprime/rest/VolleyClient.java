@@ -1,6 +1,7 @@
 package com.bgjug.jprime.rest;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.json.JSONObject;
@@ -39,7 +40,7 @@ public class VolleyClient {
 
 		mRequestQueue.add(stringRequest);
 
-		return future.get();
+		return future.get(7, TimeUnit.SECONDS);
 	}
 	
 	public void stopReuestQueue()

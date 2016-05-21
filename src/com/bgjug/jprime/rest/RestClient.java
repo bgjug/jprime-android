@@ -167,11 +167,11 @@ public class RestClient {
 		volleyClient.startReuestQueue();
 	}
 
-	public String getStatusCode() {
+	public String getStatusMessage() {
 		return statusMessage;
 	}
 
-	public void setStatusCode(String statusMessage) {
+	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
 	}
 }

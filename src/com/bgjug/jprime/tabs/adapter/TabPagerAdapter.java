@@ -3,14 +3,13 @@ package com.bgjug.jprime.tabs.adapter;
 /*import info.androidhive.tabsswipe.GamesFragment;
 import info.androidhive.tabsswipe.MoviesFragment;
 import info.androidhive.tabsswipe.TopRatedFragment;*/
-import com.bgjug.jprime.tabs.fragments.SessionsFragment;
-import com.bgjug.jprime.tabs.fragments.MyAgendaFragment;
-import com.bgjug.jprime.tabs.fragments.SpeakersFragment;
-import com.bgjug.jprime.tabs.fragments.VenueFragment;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.bgjug.jprime.tabs.fragments.SessionsFragment;
+import com.bgjug.jprime.tabs.fragments.SpeakersFragment;
+import com.bgjug.jprime.tabs.fragments.VenueFragment;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
 

@@ -13,13 +13,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bgjug.jprime.model.Speaker;
 import com.bgjug.jprime.persistance.DatabaseHelper;
-import com.bgjug.jprime.tabs.fragments.asynctasks.SpeakerAsyncTask;
+import com.bgjug.jprime.rest.RestClient;
+import com.bgjug.jprime.tabs.fragments.asynctasks.ReloadAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.BitmapUtils;
 import com.bgjug.jprime2016.R;
 
@@ -27,33 +29,53 @@ public class SpeakersFragment extends Fragment {
 	private View rootView;
 	private BaseAdapter adapterSpeaker;
 	private DatabaseHelper dbHelper;
+	private Button retryButton;
+	private TextView errorText;
 	public static List<Speaker> allSpeakers;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		rootView = inflater.inflate(R.layout.fragment_speakers, container,
 				false);
 
 		dbHelper = new DatabaseHelper(this.getActivity(), 5);
 		allSpeakers = dbHelper.getSpeakers();
-		// An AsyncTask is implemented and it uses getSpeakers from RestClient
-		// but now the resource is empty.
-		// Use a hack for now. Get the speakers from Sessions (getSessions)
-		if (allSpeakers == null || allSpeakers.isEmpty()) {
-			SpeakerAsyncTask speakersTask = new SpeakerAsyncTask(
-					SpeakersFragment.this);
-			speakersTask.execute("");
-		} else
-			loadSpeakers(allSpeakers, false);
-
+		
+		if (allSpeakers.isEmpty()) {
+			
+			reloadContent();
+			
+		} else{
+			loadSpeakers(allSpeakers);
+		}
+			
 		return rootView;
 	}
+	
+	private void reloadContent()
+	{
+		
+		errorText = (TextView) rootView.findViewById(R.id.errorMessageSpeakers);
+		retryButton = (Button) rootView.findViewById(R.id.retryButtonSpeakers);
+		
+		errorText.setText(RestClient.getInstance().getStatusMessage());
+		retryButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				ReloadAsyncTask reloadtask = new ReloadAsyncTask(
+						SpeakersFragment.this);
+				reloadtask.execute(""); 
+			}
+		});
+		
+	}
 
-	public void loadSpeakers(List<Speaker> allSpeakers, boolean dbInsert) {
+	public void loadSpeakers(List<Speaker> allSpeakers) {
 		final List<Speaker> speakers = SpeakersFragment.allSpeakers = allSpeakers;
-		if(dbInsert)
-			dbHelper.addSpeakers(allSpeakers);
 		
 		final ListView listViewSpeaker = (ListView) rootView
 				.findViewById(R.id.speakerListView);
@@ -141,4 +163,5 @@ public class SpeakersFragment extends Fragment {
 		listViewSpeaker.setSelection(0);
 
 	}
+
 }

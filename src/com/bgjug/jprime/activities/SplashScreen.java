@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.bgjug.jprime.model.Session;
+import com.bgjug.jprime.model.Speaker;
 import com.bgjug.jprime.persistance.DatabaseHelper;
 import com.bgjug.jprime.tabs.JPMainActivity;
 import com.bgjug.jprime.tabs.fragments.asynctasks.StartupAsyncTask;
@@ -20,7 +21,8 @@ public class SplashScreen extends Activity {
 
 		DatabaseHelper dbHelper = new DatabaseHelper(this, 5);
 		List<Session> sessions = dbHelper.getSessions(false);
-		if (sessions == null || sessions.isEmpty()) {
+		List<Speaker> speakers = dbHelper.getSpeakers();
+		if (sessions.isEmpty() || speakers.isEmpty()) {
 			
 			StartupAsyncTask startupTask = new StartupAsyncTask(new Intent(
 					this, JPMainActivity.class), this);

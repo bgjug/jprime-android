@@ -49,16 +49,6 @@
         android:layout_height="1dp"
         android:background="@android:color/holo_blue_dark" />
 
-    <TextView
-        android:id="@+id/textView_noItems"
-        android:layout_width="fill_parent"
-        android:paddingTop="10dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text=""
-        android:textColor="@android:color/holo_blue_dark"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <ListView
         android:id="@+id/agendaListView"
         android:layout_width="match_parent"
@@ -66,5 +56,26 @@
         android:clipToPadding="false"
         android:padding="16dip" >
     </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/errorMessageAgenda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"/>
+
+        <Button
+            android:id="@+id/retryButtonAgenda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_default"
+            android:visibility="invisible"
+            android:text="Retry"/>
+    </LinearLayout>
 
 </LinearLayout>
