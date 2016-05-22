@@ -23,6 +23,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.bgjug.jprime.activities.SplashScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashScreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,11 +34,17 @@
 
         <uses-library android:name="android.test.runner" />
 
-        <activity android:name="com.bgjug.jprime.tabs.JPMainActivity" >
+        <activity
+            android:name="com.bgjug.jprime.tabs.JPMainActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.bgjug.jprime.tabs.fragments.SpeakerDetails" >
+        <activity
+            android:name="com.bgjug.jprime.tabs.fragments.SpeakerDetails"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.bgjug.jprime.tabs.fragments.SessionDetails" >
+        <activity
+            android:name="com.bgjug.jprime.tabs.fragments.SessionDetails"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

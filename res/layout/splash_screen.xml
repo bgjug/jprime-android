@@ -12,4 +12,14 @@
         android:layout_centerVertical="true"
         android:src="@drawable/logo" />
 
+    <TextView
+        android:id="@+id/splashScreenLoadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LogoImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Loading..."
+        android:textColor="@android:color/holo_orange_light" />
+
 </RelativeLayout>
