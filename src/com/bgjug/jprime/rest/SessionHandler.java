@@ -34,7 +34,8 @@ public class SessionHandler
         return session;
     }
 
-    private Date handleDate(JSONObject dateObject) throws JSONException
+    @SuppressWarnings("deprecation")
+	private Date handleDate(JSONObject dateObject) throws JSONException
     {
         Date date = new Date();
         date.setYear(dateObject.getInt("year"));

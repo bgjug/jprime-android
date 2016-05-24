@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -53,9 +55,25 @@ public class SessionDetails extends FragmentActivity {
 			}
 
 		});
-
-
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            finish();
+	            return true;
+	    }
+
+	    return super.onOptionsItemSelected(item);
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    return true;
+	}
+	
 	private String getSpeakerName(Session session){
 		if(session.getSpeakerLastName() == null){
 			return session.getSpeakerFirstName();

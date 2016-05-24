@@ -141,9 +141,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = getWritableDatabase();
 
-		db.update(TABLE_SESSION, cv,
-				String.format("%s = '%s'", FIELD_NAME, session.getName()), null);
+		db.update(TABLE_SESSION, cv, String.format("%s = '%s'", FIELD_NAME,
+				getEscapedQuoteText(session.getName())), null);
 
+	}
+
+	private String getEscapedQuoteText(String name) {
+		if (name.indexOf("'") == -1)
+			return name;
+
+		return name.replaceAll("'", "''");
 	}
 
 	public Speaker getSpeaker(String speakerFirstName, String speakerLastName) {
@@ -151,9 +158,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		String[] columns = new String[] { FIELD_LASTNAME, FIELD_FIRSTNAME,
 				FIELD_EMAIL, FIELD_BIO, FIELD_TWITTERURL, FIELD_HEADLINE,
 				FIELD_PICTURE };
-		Cursor c = db.query(TABLE_SPEAKER, columns, FIELD_FIRSTNAME
-				+ "='" + speakerFirstName + "' AND " + FIELD_LASTNAME
-				+ "='" + speakerLastName + "'", null, null, null, null);
+		Cursor c = db.query(TABLE_SPEAKER, columns, FIELD_FIRSTNAME + "='"
+				+ speakerFirstName + "' AND " + FIELD_LASTNAME + "='"
+				+ speakerLastName + "'", null, null, null, null);
 
 		Speaker result = null;
 		while (c.moveToNext()) {

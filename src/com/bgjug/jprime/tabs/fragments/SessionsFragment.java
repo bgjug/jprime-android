@@ -1,8 +1,5 @@
 package com.bgjug.jprime.tabs.fragments;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -28,6 +25,7 @@ import com.bgjug.jprime.persistance.DatabaseHelper;
 import com.bgjug.jprime.rest.RestClient;
 import com.bgjug.jprime.tabs.fragments.asynctasks.ReloadAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.ImageStarView;
+import com.bgjug.jprime.tabs.fragments.utils.ModelUtil;
 import com.bgjug.jprime2016.R;
 
 public class SessionsFragment extends Fragment {
@@ -85,7 +83,7 @@ public class SessionsFragment extends Fragment {
 		if (allSessions.isEmpty() && !fav) {
 
 			reloadContent();
-			
+
 		} else {
 			loadAgenda(allSessions, 1);
 		}
@@ -94,17 +92,17 @@ public class SessionsFragment extends Fragment {
 	}
 
 	private void reloadContent() {
-		
+
 		errorText = (TextView) rootView.findViewById(R.id.errorMessageAgenda);
 		errorText.setText(RestClient.getInstance().getStatusMessage());
 		retryButton = (Button) rootView.findViewById(R.id.retryButtonAgenda);
 		retryButton.setVisibility(0);
-		
+
 		retryButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
+
 				ReloadAsyncTask reloadtask = new ReloadAsyncTask(
 						SessionsFragment.this);
 				reloadtask.execute("");
@@ -120,7 +118,8 @@ public class SessionsFragment extends Fragment {
 	public void loadAgenda(List<Session> result, int dayRequest) {
 		allSessions = result;
 
-		final List<Session> sessionsDay = getSessionsDay(result, dayRequest);
+		final List<Session> sessionsDay = ModelUtil.getSessionsDay(result,
+				dayRequest, dbHelper);
 
 		ListView listViewAgenda = (ListView) rootView
 				.findViewById(R.id.agendaListView);
@@ -167,9 +166,10 @@ public class SessionsFragment extends Fragment {
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewTime),
-						getSessionTime(session.getStartTime()) + "-"
-								+ getSessionTime(session.getEndTime()),
-						Typeface.BOLD);
+						ModelUtil.getSessionTimeAsString(session.getStartTime())
+								+ "-"
+								+ ModelUtil.getSessionTimeAsString(session
+										.getEndTime()), Typeface.BOLD);
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewSessionName),
@@ -181,11 +181,11 @@ public class SessionsFragment extends Fragment {
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewSpeaker),
-						getSpeakerFullName(session), Typeface.ITALIC);
+						ModelUtil.getFullSpeakerName(session), Typeface.ITALIC);
 
 				applyTextViewFormat(
 						getTextView(agendaItemLayout, R.id.textViewSessionInfo),
-						getSessionShortDscr(session), Typeface.NORMAL);
+						ModelUtil.getSessionShortDscr(session), Typeface.NORMAL);
 
 				agendaItemLayout.setOnClickListener(new OnClickListener() {
 
@@ -202,18 +202,6 @@ public class SessionsFragment extends Fragment {
 				return agendaItemLayout;
 			}
 
-			private String getSpeakerFullName(final Session session) {
-				if (session.getSpeaker().getlastName() == null)
-					return session.getSpeaker().getfirstName();
-				return session.getSpeaker().getfirstName() + " "
-						+ session.getSpeaker().getlastName();
-			}
-
-			private String getSessionShortDscr(Session session) {
-				int index = session.getDescription().indexOf(" ", 55);
-				return session.getDescription().substring(0, index) + " ...";
-			}
-
 			void applyTextViewFormat(TextView textView, String textContent,
 					int typeFace) {
 				textView.setText(textContent);
@@ -222,15 +210,6 @@ public class SessionsFragment extends Fragment {
 
 			TextView getTextView(View view, int id) {
 				return (TextView) view.findViewById(id);
-			}
-
-			private String getSessionTime(Date date) {
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(date);
-				int hours = calendar.get(Calendar.HOUR_OF_DAY);
-				String minutes = calendar.get(Calendar.MINUTE) == 0 ? "00"
-						: Integer.toString(calendar.get(Calendar.MINUTE));
-				return Integer.toString(hours) + ":" + minutes;
 			}
 
 			@Override
@@ -254,35 +233,10 @@ public class SessionsFragment extends Fragment {
 		listViewAgenda.setSelection((Integer) adapterAgenda.getItem(0));
 	}
 
-	private List<Session> getSessionsDay(List<Session> result, int dayRequest) {
-
-		List<Session> resultSessions = new ArrayList<Session>();
-		if (result == null || result.isEmpty())
-			return resultSessions;
-		int firstDay = getFirstConferenceDay(result);
-		for (Session session : result) {
-			if (dayRequest == 1 && session.getStartTime().getDay() == firstDay)
-				resultSessions.add(session);
-			else if (dayRequest == 2
-					&& session.getStartTime().getDay() != firstDay)
-				resultSessions.add(session);
-		}
-		return resultSessions;
-	}
-
 	private void changeButtonClicked(Button clickedButton, Button otherButton) {
 		clickedButton.setTextColor(getResources().getColor(
 				android.R.color.holo_blue_dark));
 		otherButton.setTextColor(Color.GRAY);
-	}
-
-	private int getFirstConferenceDay(List<Session> result) {
-		int firstConfDay = result.get(0).getStartTime().getDay();
-		for (Session session : result) {
-			if (firstConfDay > session.getStartTime().getDay())
-				firstConfDay = session.getStartTime().getDay();
-		}
-		return firstConfDay;
 	}
 
 	@Override

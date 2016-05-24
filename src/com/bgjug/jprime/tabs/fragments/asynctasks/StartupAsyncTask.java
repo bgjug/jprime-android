@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import com.bgjug.jprime.activities.SplashScreen;
 import com.bgjug.jprime.model.Session;
+import com.bgjug.jprime.model.Speaker;
 import com.bgjug.jprime.persistance.DatabaseHelper;
 import com.bgjug.jprime.rest.RestClient;
 
@@ -30,13 +31,25 @@ public class StartupAsyncTask extends AsyncTask<String, Void, List<Session>> {
 	@Override
 	protected List<Session> doInBackground(String... params) {
 
-		return jPrimeRC.getSessions();
+		List<Session> sessions = dbHelper.getSessions(false);
+		List<Speaker> speakers = dbHelper.getSpeakers();
+		if (sessions.isEmpty() || speakers.isEmpty()) 
+			return jPrimeRC.getSessions();
+		else
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		return sessions;
 	}
 
 	@Override
 	protected void onPostExecute(List<Session> result) {
 
-		if (!jPrimeRC.getSessions().isEmpty()) {
+		List<Session> sessions = dbHelper.getSessions(false);
+		List<Speaker> speakers = dbHelper.getSpeakers();
+		if (sessions.isEmpty() || speakers.isEmpty()) {
 			dbHelper.addSessions(jPrimeRC.getSessions());
 			dbHelper.addSpeakers(jPrimeRC.getSpeakers());
 		}
