@@ -18,7 +18,7 @@ import com.bgjug.jprime.model.Speaker;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public DatabaseHelper(Context context, int version) {
-		super(context, "jprime2016", null, version);
+		super(context, "jprime2018", null, version);
 	}
 
 	@Override
@@ -42,7 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			ContentValues cv = getSessionContentValue(session);
 			db.insert(TABLE_SESSION, null, cv);
 		}
-
 	}
 
 	public void addSpeakers(List<Speaker> result) {
@@ -69,6 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		cv.put(FIELD_ENDTIME, String.valueOf(session.getEndTime().getTime()));
 		cv.put(FIELD_ISFAVORITE, session.getIsFavorite());
 		cv.put(FIELD_SPEAKER_LAST_NAME, session.getSpeaker().getlastName());
+		cv.put(FIELD_IS_WORKSHOP, session.isWorkshop());
 		return cv;
 	}
 
@@ -77,27 +77,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		String[] columns = new String[] { FIELD_NAME, FIELD_DESCRIPTION,
 				FIELD_SPEAKER_FIRST_NAME, FIELD_COSPEAKER, FIELD_HALL,
 				FIELD_STARTTIME, FIELD_ENDTIME, FIELD_ISFAVORITE,
-				FIELD_SPEAKER_LAST_NAME };
-		Cursor c = db.query(TABLE_SESSION, columns, null, null, null, null,
+				FIELD_SPEAKER_LAST_NAME, FIELD_IS_WORKSHOP };
+		Cursor cursor = db.query(TABLE_SESSION, columns, null, null, null, null,
 				null);
 
 		List<Session> result = new ArrayList<Session>();
-		while (c.moveToNext()) {
+		while (cursor.moveToNext()) {
 
-			boolean isFav = c.getInt(7) == 1;
+			boolean isFav = cursor.getInt(7) == 1;
 
 			Speaker speaker = new Speaker();
-			speaker.setfirstName(c.getString(2));
-			speaker.setlastName(c.getString(8));
+			speaker.setfirstName(cursor.getString(2));
+			speaker.setlastName(cursor.getString(8));
 			Speaker coSpeaker = new Speaker();
-			coSpeaker.setfirstName(c.getString(3));
+			coSpeaker.setfirstName(cursor.getString(3));
 
 			if (requestFav && !isFav)
 				continue;
-			result.add(new Session(new Date(Long.parseLong(c.getString(5))),
-					new Date(Long.parseLong(c.getString(6))), c.getString(4), c
-							.getString(0), c.getString(1), speaker, coSpeaker,
-					c.getInt(7)));
+			result.add(new Session(new Date(Long.parseLong(cursor.getString(5))),
+					new Date(Long.parseLong(cursor.getString(6))), cursor.getString(4), cursor
+							.getString(0), cursor.getString(1), speaker, coSpeaker,
+					cursor.getInt(7), cursor.getString(9)));
 		}
 
 		return result;

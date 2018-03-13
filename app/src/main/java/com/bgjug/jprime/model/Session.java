@@ -19,14 +19,15 @@ public class Session implements Parcelable {
 	private Integer isFavorite = 0;
 	private String speakerFirstName;
 	private String speakerLastName;
+	private String isWorkshop;
 
 	public Session() {
 		super();
 	}
 
 	public Session(Date startTime, Date endTime, String hall, String name,
-			String description, Speaker speaker, Speaker coSpeaker,
-			Integer isFavorite) {
+                   String description, Speaker speaker, Speaker coSpeaker,
+                   Integer isFavorite, String isWorkshop) {
 		super();
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -36,11 +37,12 @@ public class Session implements Parcelable {
 		this.speaker = speaker;
 		this.coSpeaker = coSpeaker;
 		this.isFavorite = isFavorite;
+		this.isWorkshop = isWorkshop;
 	}
 
 	public Session(Date startTime, Date endTime, String hall, String name,
 			String description, Speaker speaker, Speaker coSpeaker) {
-		this(startTime, endTime, hall, name, description, speaker, coSpeaker, 0);
+		this(startTime, endTime, hall, name, description, speaker, coSpeaker, 0, "false");
 	}
 
 	public Date getStartTime() {
@@ -131,6 +133,14 @@ public class Session implements Parcelable {
 		this.speakerLastName = speakerLastName;
 	}
 
+	public String isWorkshop() {
+		return isWorkshop;
+	}
+
+	public void setWorkshop(String workshop) {
+		isWorkshop = workshop;
+	}
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(this.name);
@@ -140,6 +150,7 @@ public class Session implements Parcelable {
 		dest.writeString(this.description);
 		dest.writeString(this.getSpeaker().getfirstName());
 		dest.writeString(this.getSpeaker().getlastName());
+		dest.writeString(this.isWorkshop);
 	}
 
 	public Session(Parcel in) {
@@ -149,6 +160,7 @@ public class Session implements Parcelable {
 		this.description = in.readString();
 		this.speakerFirstName = in.readString();
 		this.speakerLastName = in.readString();
+		this.isWorkshop = in.readString();
 	}
 
 	@SuppressWarnings("rawtypes")

@@ -1,7 +1,7 @@
 package com.bgjug.jprime.tabs.fragments.asynctasks;
 
 import java.util.List;
-
+import static com.bgjug.jprime.persistance.DBStatements.DATABASE_VERSION;
 import android.content.Intent;
 import android.os.AsyncTask;
 
@@ -21,7 +21,7 @@ public class StartupAsyncTask extends AsyncTask<String, Void, List<Session>> {
 		this.jpMainActivity = intent;
 		this.splashScreen = splashScreen;
 		this.jPrimeRC = RestClient.getInstance();
-		dbHelper = new DatabaseHelper(splashScreen, 5);
+		dbHelper = new DatabaseHelper(splashScreen,  DATABASE_VERSION);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.bgjug.jprime.tabs.fragments;
 
+import static com.bgjug.jprime.persistance.DBStatements.DATABASE_VERSION;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,11 +38,15 @@ public class SessionDetails extends FragmentActivity {
 
 		TextView textVSessionDescr = (TextView) findViewById(R.id.textViewSessionDetailsDescr);
 		textVSessionDescr.setText(session.getDescription());
+
+		TextView textVSessionWorkshopInfo = (TextView) findViewById(R.id.textViewWorkshopInfo);
+		textVSessionWorkshopInfo.setText("( " + session.isWorkshop() + " )");
+		textVSessionWorkshopInfo.setTypeface(null, Typeface.BOLD);
 		
 		TextView sessionSpeaker = (TextView) findViewById(R.id.textViewSpeakerSessionDetails);
 		sessionSpeaker.setText(getSpeakerName(session));
 		sessionSpeaker.setOnClickListener(new TextView.OnClickListener() {
-		final DatabaseHelper dbHelper = new DatabaseHelper(SessionDetails.this, 5);;
+		final DatabaseHelper dbHelper = new DatabaseHelper(SessionDetails.this, DATABASE_VERSION);
 		
 			@Override
 			public void onClick(View v) {

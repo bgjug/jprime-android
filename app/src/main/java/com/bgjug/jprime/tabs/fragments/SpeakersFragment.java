@@ -1,7 +1,7 @@
 package com.bgjug.jprime.tabs.fragments;
 
 import java.util.List;
-
+import static com.bgjug.jprime.persistance.DBStatements.DATABASE_VERSION;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,7 +40,7 @@ public class SpeakersFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_speakers, container,
 				false);
 
-		dbHelper = new DatabaseHelper(this.getActivity(), 5);
+		dbHelper = new DatabaseHelper(this.getActivity(), DATABASE_VERSION);
 		allSpeakers = dbHelper.getSpeakers();
 		
 		if (allSpeakers.isEmpty()) {

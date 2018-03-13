@@ -1,7 +1,7 @@
 package com.bgjug.jprime.tabs.fragments;
 
 import java.util.List;
-
+import static com.bgjug.jprime.persistance.DBStatements.DATABASE_VERSION;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -77,7 +77,7 @@ public class SessionsFragment extends Fragment {
 
 		});
 
-		dbHelper = new DatabaseHelper(this.getActivity(), 5);
+		dbHelper = new DatabaseHelper(this.getActivity(), DATABASE_VERSION);
 		allSessions = dbHelper.getSessions(fav);
 
 		if (allSessions.isEmpty() && !fav) {

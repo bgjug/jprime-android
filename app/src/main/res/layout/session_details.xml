@@ -29,8 +29,12 @@
                 android:id="@+id/textViewSessionDetailsName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewWorkshopInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -1,7 +1,7 @@
 package com.bgjug.jprime.tabs.fragments.asynctasks;
 
 import java.util.List;
-
+import static com.bgjug.jprime.persistance.DBStatements.DATABASE_VERSION;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
@@ -21,7 +21,7 @@ public class ReloadAsyncTask extends AsyncTask<String, Void, List<Session>> {
 	private SpeakersFragment speakersActivity = null;
 
 	public ReloadAsyncTask(SessionsFragment agendaActivity) {
-		dbHelper = new DatabaseHelper(agendaActivity.getActivity(), 5);
+		dbHelper = new DatabaseHelper(agendaActivity.getActivity(), DATABASE_VERSION);
 		this.jPrimeRC = RestClient.getInstance();
 		this.agendaActivity = agendaActivity;
 		progressD = new ProgressDialog(agendaActivity.getActivity());
@@ -33,7 +33,7 @@ public class ReloadAsyncTask extends AsyncTask<String, Void, List<Session>> {
 		this.speakersActivity = speakersActivity;
 		progressD = new ProgressDialog(speakersActivity.getActivity());
 		progressD.setTitle("Loading jPrime Speakers");
-		dbHelper = new DatabaseHelper(speakersActivity.getActivity(), 5);
+		dbHelper = new DatabaseHelper(speakersActivity.getActivity(), DATABASE_VERSION);
 	}
 
 	@Override
