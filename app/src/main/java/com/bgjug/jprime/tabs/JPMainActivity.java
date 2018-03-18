@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bgjug.jprime.tabs.adapter.TabPagerAdapter;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class JPMainActivity extends FragmentActivity implements
 		ActionBar.TabListener {

@@ -23,7 +23,7 @@ import com.bgjug.jprime.persistance.DatabaseHelper;
 import com.bgjug.jprime.rest.RestClient;
 import com.bgjug.jprime.tabs.fragments.asynctasks.ReloadAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.BitmapUtils;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class SpeakersFragment extends Fragment {
 	private View rootView;

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bgjug.jprime.model.Speaker;
 import com.bgjug.jprime.tabs.fragments.utils.BitmapUtils;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class SpeakerDetails extends FragmentActivity {
 

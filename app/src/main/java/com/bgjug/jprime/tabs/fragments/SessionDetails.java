@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bgjug.jprime.model.Session;
 import com.bgjug.jprime.model.Speaker;
 import com.bgjug.jprime.persistance.DatabaseHelper;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class SessionDetails extends FragmentActivity {
 	@Override

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 27
     buildToolsVersion "27.0.3"
 
     defaultConfig {
-        applicationId "com.bgjug.jprime2016"
+        applicationId "com.bgjug.jprime2018"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 27
     }
 
     buildTypes {

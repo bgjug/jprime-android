@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.bgjug.jprime2016.ScheduleActivity" >
+    tools:context="com.bgjug.jprime2018.ScheduleActivity" >
 
     <item
         android:id="@+id/action_settings"

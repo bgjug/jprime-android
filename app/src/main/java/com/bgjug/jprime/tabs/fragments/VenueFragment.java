@@ -15,7 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bgjug.jprime.model.VenueHall;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class VenueFragment extends Fragment {
 	private View rootView;

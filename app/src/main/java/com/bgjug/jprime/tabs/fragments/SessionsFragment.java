@@ -26,7 +26,7 @@ import com.bgjug.jprime.rest.RestClient;
 import com.bgjug.jprime.tabs.fragments.asynctasks.ReloadAsyncTask;
 import com.bgjug.jprime.tabs.fragments.utils.ImageStarView;
 import com.bgjug.jprime.tabs.fragments.utils.ModelUtil;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class SessionsFragment extends Fragment {
 

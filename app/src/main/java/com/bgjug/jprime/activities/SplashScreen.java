@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.bgjug.jprime.tabs.JPMainActivity;
 import com.bgjug.jprime.tabs.fragments.asynctasks.StartupAsyncTask;
-import com.bgjug.jprime2016.R;
+import com.bgjug.jprime2018.R;
 
 public class SplashScreen extends Activity {
 
