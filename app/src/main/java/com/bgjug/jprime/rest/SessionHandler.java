@@ -24,9 +24,8 @@ public class SessionHandler
 
         session.setDescription(submissionJSON.getString("description"));
         session.setName(submissionJSON.getString("title"));
-        if(submissionJSON.has("isWorkshop")) {
-            session.setWorkshop(submissionJSON.getString("isWorkshop"));
-        }
+        session.setType(submissionJSON.getString("type"));
+
 
         Date startTime = handleDate(sessionJSON.getJSONObject("startTime"));
         Date endTime = handleDate(sessionJSON.getJSONObject("endTime"));

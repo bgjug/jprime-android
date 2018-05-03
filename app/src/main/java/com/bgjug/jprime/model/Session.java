@@ -19,7 +19,7 @@ public class Session implements Parcelable {
 	private Integer isFavorite = 0;
 	private String speakerFirstName;
 	private String speakerLastName;
-	private String isWorkshop;
+	private String type;
 
 	public Session() {
 		super();
@@ -27,7 +27,7 @@ public class Session implements Parcelable {
 
 	public Session(Date startTime, Date endTime, String hall, String name,
                    String description, Speaker speaker, Speaker coSpeaker,
-                   Integer isFavorite, String isWorkshop) {
+                   Integer isFavorite, String type) {
 		super();
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -37,12 +37,12 @@ public class Session implements Parcelable {
 		this.speaker = speaker;
 		this.coSpeaker = coSpeaker;
 		this.isFavorite = isFavorite;
-		this.isWorkshop = isWorkshop;
+		this.type = type;
 	}
 
 	public Session(Date startTime, Date endTime, String hall, String name,
 			String description, Speaker speaker, Speaker coSpeaker) {
-		this(startTime, endTime, hall, name, description, speaker, coSpeaker, 0, "false");
+		this(startTime, endTime, hall, name, description, speaker, coSpeaker, 0, "");
 	}
 
 	public Date getStartTime() {
@@ -133,12 +133,12 @@ public class Session implements Parcelable {
 		this.speakerLastName = speakerLastName;
 	}
 
-	public String isWorkshop() {
-		return isWorkshop;
+	public String getType() {
+		return type;
 	}
 
-	public void setWorkshop(String workshop) {
-		isWorkshop = workshop;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class Session implements Parcelable {
 		dest.writeString(this.description);
 		dest.writeString(this.getSpeaker().getfirstName());
 		dest.writeString(this.getSpeaker().getlastName());
-		dest.writeString(this.isWorkshop);
+		dest.writeString(this.type);
 	}
 
 	public Session(Parcel in) {
@@ -160,7 +160,7 @@ public class Session implements Parcelable {
 		this.description = in.readString();
 		this.speakerFirstName = in.readString();
 		this.speakerLastName = in.readString();
-		this.isWorkshop = in.readString();
+		this.type = in.readString();
 	}
 
 	@SuppressWarnings("rawtypes")

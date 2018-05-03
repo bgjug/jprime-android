@@ -68,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		cv.put(FIELD_ENDTIME, String.valueOf(session.getEndTime().getTime()));
 		cv.put(FIELD_ISFAVORITE, session.getIsFavorite());
 		cv.put(FIELD_SPEAKER_LAST_NAME, session.getSpeaker().getlastName());
-		cv.put(FIELD_IS_WORKSHOP, session.isWorkshop());
+		cv.put(FIELD_IS_WORKSHOP, session.getType());
 		return cv;
 	}
 

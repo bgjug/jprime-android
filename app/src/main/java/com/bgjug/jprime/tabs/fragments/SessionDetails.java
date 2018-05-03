@@ -40,7 +40,7 @@ public class SessionDetails extends FragmentActivity {
 		textVSessionDescr.setText(session.getDescription());
 
 		TextView textVSessionWorkshopInfo = (TextView) findViewById(R.id.textViewWorkshopInfo);
-		textVSessionWorkshopInfo.setText("( " + session.isWorkshop() + " )");
+		textVSessionWorkshopInfo.setText("( " + session.getType() + " )");
 		textVSessionWorkshopInfo.setTypeface(null, Typeface.BOLD);
 		
 		TextView sessionSpeaker = (TextView) findViewById(R.id.textViewSpeakerSessionDetails);
