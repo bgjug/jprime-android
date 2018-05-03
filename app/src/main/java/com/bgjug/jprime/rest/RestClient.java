@@ -41,15 +41,29 @@ public class RestClient {
 
 	private JSONArray initSessions() throws InterruptedException,
 			ExecutionException, TimeoutException, JSONException {
-
-		JSONObject sessionsEntity = volleyClient.requestJSON(ResourceConstants.JPRIME_URL
-				+ "/" + ResourceConstants.SESSIONS_RESOURCE);
-
-		sessionsArray = sessionsEntity
-				.getJSONObject(ResourceConstants.EMBEDDED).getJSONArray(
-						ResourceConstants.SESSIONS_RESOURCE);
+		sessionsArray = new JSONArray();
+		retrieveAllSessions();
 
 		return sessionsArray;
+	}
+
+	private void retrieveAllSessions() throws InterruptedException, ExecutionException, TimeoutException, JSONException {
+		JSONArray sessionsPerPage;
+		int index = 0;
+		JSONObject sessionsResponse = volleyClient.requestJSON(ResourceConstants.JPRIME_URL
+				+ "/" + ResourceConstants.SESSIONS_RESOURCE);
+		int numberOfPages = sessionsResponse.getJSONObject(ResourceConstants.PAGE).getInt(ResourceConstants.TOTAL_PAGES);
+
+		for(int page = 0; page < numberOfPages; page++){
+			sessionsResponse = volleyClient.requestJSON(ResourceConstants.JPRIME_URL
+					+ "/" + ResourceConstants.SESSIONS_RESOURCE + "?page=" + page);
+			sessionsPerPage = sessionsResponse
+					.getJSONObject(ResourceConstants.EMBEDDED).getJSONArray(ResourceConstants.SESSIONS_RESOURCE);
+			for(int session = 0; session < sessionsPerPage.length(); session++){
+				sessionsArray.put(index, sessionsPerPage.get(session));
+				index++;
+			}
+		}
 	}
 
 	public List<Speaker> getSpeakers() {

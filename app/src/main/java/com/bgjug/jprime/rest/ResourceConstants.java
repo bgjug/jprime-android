@@ -9,5 +9,6 @@ public class ResourceConstants {
     public static final String SUBMISSION_RESOURCE = "submission";
     public static final String LINKS = "_links";
     public static final String SPEAKERS_RESOURCE = "speakers";
-
+    public static final String PAGE = "page";
+    public static final String TOTAL_PAGES = "totalPages";
 }
