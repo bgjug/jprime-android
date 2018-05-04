@@ -118,7 +118,7 @@ public class SessionsFragment extends Fragment {
 	public void loadAgenda(List<Session> result, int dayRequest) {
 		allSessions = result;
 
-		final List<Session> sessionsDay = ModelUtil.getSessionsDay(result,
+		final List<Session> sessionsDay = ModelUtil.getSortedSessionsByDay(result,
 				dayRequest, dbHelper);
 
 		ListView listViewAgenda = (ListView) rootView

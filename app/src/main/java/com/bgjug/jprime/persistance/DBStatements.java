@@ -1,7 +1,7 @@
 package com.bgjug.jprime.persistance;
 
 public interface DBStatements {
-	public static final int DATABASE_VERSION = 6;
+	public static final int DATABASE_VERSION = 10;
 	static final String TABLE_SESSION = "SESSIONS";
 	static final String TABLE_SPEAKER = "SPEAKER";
 

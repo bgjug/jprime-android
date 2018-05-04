@@ -2,6 +2,8 @@ package com.bgjug.jprime.tabs.fragments.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +12,26 @@ import com.bgjug.jprime.persistance.DatabaseHelper;
 
 public class ModelUtil {
 	@SuppressWarnings("deprecation")
-	public static List<Session> getSessionsDay(List<Session> result, int dayRequest, DatabaseHelper dbHelper) {
+	public static List<Session> getSortedSessionsByDay(List<Session> result, int dayRequest, DatabaseHelper dbHelper) {
 
+		List<Session> sessionsByDay = getSessionsByDay(result, dayRequest, dbHelper);
+		Collections.sort(sessionsByDay, new Comparator<Session>() {
+			@Override
+			public int compare(Session session1, Session session2) {
+				if(session1.getStartTime().getDate() == session2.getStartTime().getDate() &&
+						session1.getStartTime().getHours() == session2.getStartTime().getHours()      &&
+						session1.getStartTime().getMinutes() == session2.getStartTime().getMinutes() &&
+						session1.getStartTime().getSeconds() == session2.getStartTime().getSeconds()  ){
+					return session1.getHall().equals("Hall A") && !session1.getHall().equals(session2.getHall()) ? -1 : 1;
+				}
+				return session1.getStartTime().before(session2.getStartTime()) ? -1 : 1;
+			}
+		});
+
+		return sessionsByDay;
+	}
+
+	private static List<Session> getSessionsByDay(List<Session> result, int dayRequest, DatabaseHelper dbHelper) {
 		List<Session> resultSessions = new ArrayList<Session>();
 		if (result == null || result.isEmpty())
 			return resultSessions;

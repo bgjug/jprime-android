@@ -40,10 +40,11 @@ public class SessionHandler
 	private Date handleDate(JSONObject dateObject) throws JSONException
     {
         Date date = new Date();
-        date.setYear(dateObject.getInt("year"));
+        date.setYear(dateObject.getInt("year") - 1900);
         date.setDate(dateObject.getInt("dayOfMonth"));
         date.setHours(dateObject.getInt("hourOfDay"));
         date.setMinutes(dateObject.getInt("minuteOfHour"));
+        date.setSeconds(0);
 
         return date;
     }
